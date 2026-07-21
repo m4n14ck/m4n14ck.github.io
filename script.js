@@ -3,9 +3,9 @@ const rustProjects = [
     {
         name: "scanCraft",
         icon: "🦀",
-        description: "Framework moderno para reconocimiento y automatización de auditorías con Nmap.",
-        url: "https://github.com/m4n14ck/scanCraft",
-        tags: ["Rust", "CLI", "Networking"]
+        description: "Curso introductorio de Rust en español, organizado en lecciones (carpetas 1_Leccion a 7_Leccion) con ejemplos prácticos de código",
+        url: "https://github.com/m4n14ck/Rust",
+        tags: ["Rust", "CLI", "Curso"]
     },
     {
         name: "md5-tool",
