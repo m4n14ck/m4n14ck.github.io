@@ -1,28 +1,48 @@
-<section id="projects">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M4n14ck - Open Source Projects</title>
+    <meta name="description" content="Open source projects by M4n14ck - Rust and other tools">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-container">
+                <a href="#" class="logo">M4n14ck</a>
+                <ul class="nav-links">
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="https://github.com/m4n14ck" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
 
-    <div class="section-header">
-        <h2>Open Source Projects</h2>
-        <p>Una selección de mis herramientas y frameworks.</p>
-    </div>
+    <main>
+        <section id="projects">
+            <div class="section-header">
+                <h2>Open Source Projects</h2>
+                <p>Una selección de mis herramientas y frameworks.</p>
+            </div>
 
-    <div class="category">
+            <div class="category">
+                <h3>🦀 Rust Projects</h3>
+                <div class="projects-grid" id="rust-projects"></div>
+            </div>
 
-        <h3>
-            🦀 Rust Projects
-        </h3>
+            <div class="category">
+                <h3>💻 Other Projects</h3>
+                <div class="projects-grid" id="other-projects"></div>
+            </div>
+        </section>
+    </main>
 
-        <div class="projects-grid" id="rust-projects"></div>
+    <footer>
+        <p>© 2026 M4n14ck. Hecho con ❤️ y mucho Rust</p>
+    </footer>
 
-    </div>
-
-    <div class="category">
-
-        <h3>
-            💻 Other Projects
-        </h3>
-
-        <div class="projects-grid" id="other-projects"></div>
-
-    </div>
-
-</section>
+    <script src="script.js"></script>
+</body>
+</html>
