@@ -1,7 +1,7 @@
 // Datos de proyectos
 const rustProjects = [
     {
-        name: "scanCraft",
+        name: "Curso Rust",
         icon: "🦀",
         description: "Curso introductorio de Rust en español, organizado en lecciones (carpetas 1_Leccion a 7_Leccion) con ejemplos prácticos de código",
         url: "https://github.com/m4n14ck/Rust",
