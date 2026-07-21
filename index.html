@@ -1,61 +1,421 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>m4n14ck | Rust Developer & Systems Engineer</title>
-    <meta name="description" content="Perfil oficial y portafolio de m4n14ck. Desarrollador especializado en Rust, seguridad de memoria y herramientas de ciberseguridad como scanCraft y ADB-Exploiter.">
-    <meta name="keywords" content="m4n14ck, github m4n14ck, m4n14ck rust, scanCraft, ADB-Exploiter, Dexsploit, wifi-password-viewer, ciberseguridad, malwareops">
-    <link rel="canonical" href="https://github.io" />
-    <style>
-        body { font-family: monospace; background-color: #0d1117; color: #c9d1d9; padding: 20px; line-height: 1.6; }
-        a { color: #58a6ff; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        .container { max-width: 800px; margin: 0 auto; }
-        h1 { color: #f0f6fc; border-bottom: 1px solid #21262d; padding-bottom: 10px; }
-        .repo-card { background: #161b22; padding: 15px; margin: 15px 0; border: 1px solid #30363d; border-radius: 6px; }
-    </style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>m4n14ck | Rust Systems Engineer</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+
+font-family:Inter,sans-serif;
+background:#090909;
+color:white;
+overflow-x:hidden;
+
+}
+
+body::before{
+
+content:"";
+position:fixed;
+width:700px;
+height:700px;
+background:radial-gradient(circle,#dea58433,transparent 70%);
+top:-250px;
+left:-250px;
+pointer-events:none;
+
+}
+
+body::after{
+
+content:"";
+position:fixed;
+width:600px;
+height:600px;
+background:radial-gradient(circle,#ff6d0030,transparent 70%);
+bottom:-250px;
+right:-250px;
+pointer-events:none;
+
+}
+
+nav{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:30px 10%;
+
+position:sticky;
+top:0;
+
+backdrop-filter:blur(15px);
+
+background:#00000055;
+
+border-bottom:1px solid #222;
+
+}
+
+.logo{
+
+font-size:28px;
+font-weight:800;
+color:#DEA584;
+
+}
+
+nav a{
+
+color:white;
+text-decoration:none;
+margin-left:35px;
+transition:.3s;
+
+}
+
+nav a:hover{
+
+color:#DEA584;
+
+}
+
+.hero{
+
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+
+text-align:center;
+
+padding:140px 20px;
+
+}
+
+.hero h1{
+
+font-size:70px;
+
+}
+
+.hero h1 span{
+
+color:#DEA584;
+
+}
+
+.hero p{
+
+margin-top:20px;
+font-size:20px;
+max-width:750px;
+color:#bbbbbb;
+
+}
+
+.buttons{
+
+margin-top:40px;
+
+display:flex;
+gap:20px;
+
+}
+
+.btn{
+
+padding:15px 35px;
+
+border-radius:12px;
+
+text-decoration:none;
+
+font-weight:600;
+
+transition:.35s;
+
+}
+
+.primary{
+
+background:#DEA584;
+color:#111;
+
+}
+
+.secondary{
+
+border:1px solid #444;
+color:white;
+
+}
+
+.btn:hover{
+
+transform:translateY(-5px);
+
+}
+
+section{
+
+padding:80px 10%;
+
+}
+
+.title{
+
+font-size:42px;
+margin-bottom:40px;
+
+}
+
+.grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+
+gap:30px;
+
+}
+
+.card{
+
+background:#111;
+
+border:1px solid #222;
+
+padding:30px;
+
+border-radius:20px;
+
+transition:.35s;
+
+}
+
+.card:hover{
+
+transform:translateY(-8px);
+
+border-color:#DEA584;
+
+box-shadow:0 20px 40px rgba(222,165,132,.15);
+
+}
+
+.card h2{
+
+margin-bottom:15px;
+color:#DEA584;
+
+}
+
+.stats{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:30px;
+
+text-align:center;
+
+}
+
+.stat{
+
+background:#111;
+padding:40px;
+border-radius:20px;
+
+}
+
+.number{
+
+font-size:42px;
+font-weight:800;
+color:#DEA584;
+
+}
+
+footer{
+
+padding:60px;
+text-align:center;
+color:#777;
+
+}
+
+@media(max-width:800px){
+
+.hero h1{
+
+font-size:45px;
+
+}
+
+.stats{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+</style>
+
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <h1>m4n14ck - Rustops Systems Division</h1>
-            <p>Bienvenido al portafolio oficial de <strong>m4n14ck</strong>. Soy desarrollador de sistemas enfocado en la seguridad de memoria, investigación de seguridad y optimización de rendimiento con Rust.</p>
-            <p>🔗 <strong>Visita mi perfil principal:</strong> <a href="https://github.com">://github.com</a></p>
-        </header>
 
-        <main>
-            <h2>Proyectos Destacados de m4n14ck</h2>
-            
-            <div class="repo-card">
-                <h3><a href="https://github.com/scanCraft">scanCraft</a></h3>
-                <p>Automatización y gestión inteligente de flujos de trabajo con Nmap para auditorías de red.</p>
-            </div>
+<nav>
 
-            <div class="repo-card">
-                <h3><a href="https://github.com/ADB-Exploiter">ADB-Exploiter</a></h3>
-                <p>Herramienta diseñada para auditorías de seguridad y análisis en entornos Android vía ADB.</p>
-            </div>
+<div class="logo">m4n14ck</div>
 
-            <div class="repo-card">
-                <h3><a href="https://github.com/Dexsploit">Dexsploit</a></h3>
-                <p>Utilidad para la manipulación y análisis profundo de archivos ejecutables Dalvik (.dex).</p>
-            </div>
+<div>
 
-            <div class="repo-card">
-                <h3><a href="https://github.com/wifi-password-viewer">wifi-password-viewer</a></h3>
-                <p>Script y utilidad de consola para la recuperación de credenciales de redes inalámbricas locales.</p>
-            </div>
+<a href="#">Inicio</a>
+<a href="#">Proyectos</a>
+<a href="#">GitHub</a>
 
-            <div class="repo-card">
-                <h3>Herramientas en Rust (Ecosistema Reciente)</h3>
-                <p>Desarrollo de módulos nativos de alto rendimiento, incluyendo <code>process</code> (gestión de sistemas) y <code>md5-tool</code>.</p>
-            </div>
-        </main>
+</div>
 
-        <footer>
-            <p>© 2026 m4n14ck. Todo el código fuente está disponible en el <a href="https://github.com">GitHub oficial de m4n14ck</a>.</p>
-        </footer>
-    </div>
+</nav>
+
+<section class="hero">
+
+<h1>Rust <span>Systems Engineer</span></h1>
+
+<p>
+
+Desarrollador especializado en Rust, herramientas de seguridad,
+ingeniería de sistemas y software de alto rendimiento.
+
+</p>
+
+<div class="buttons">
+
+<a href="#" class="btn primary">GitHub</a>
+
+<a href="#" class="btn secondary">Ver Proyectos</a>
+
+</div>
+
+</section>
+
+<section>
+
+<h2 class="title">Featured Projects</h2>
+
+<div class="grid">
+
+<div class="card">
+
+<h2>🦀 scanCraft</h2>
+
+<p>
+Framework moderno para reconocimiento y automatización de auditorías con Nmap.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>📱 ADB-Exploiter</h2>
+
+<p>
+Toolkit para auditorías Android mediante ADB.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>⚡ Dexsploit</h2>
+
+<p>
+Framework para ingeniería inversa y análisis de archivos DEX.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>🔐 md5-tool</h2>
+
+<p>
+Utilidades de hashing y procesamiento de archivos escritas en Rust.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2 class="title">Statistics</h2>
+
+<div class="stats">
+
+<div class="stat">
+
+<div class="number">100%</div>
+
+Rust
+
+</div>
+
+<div class="stat">
+
+<div class="number">Open</div>
+
+Source
+
+</div>
+
+<div class="stat">
+
+<div class="number">12+</div>
+
+Repositories
+
+</div>
+
+<div class="stat">
+
+<div class="number">24/7</div>
+
+Learning
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+
+© 2026 m4n14ck • Rust Systems Division
+
+</footer>
+
 </body>
 </html>
