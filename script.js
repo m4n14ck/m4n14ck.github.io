@@ -29,7 +29,7 @@ const otherProjects = [
         icon: "📱",
         description: "Toolkit para auditorías Android mediante ADB.",
         url: "https://github.com/m4n14ck/ADB-Exploiter",
-        tags: ["Python", "Android"]
+        tags: ["C++", "Android"]
     },
     {
         name: "Dexsploit",
