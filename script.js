@@ -12,7 +12,7 @@ const rustProjects = [
         icon: "🔐",
         description: "Utilidades de hashing y procesamiento de archivos.",
         url: "https://github.com/m4n14ck/md5-tool",
-        tags: ["Rust", "Crypto"]
+        tags: ["Rust", "Hash"]
     },
     {
         name: "process",
