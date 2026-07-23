@@ -20,6 +20,13 @@ const rustProjects = [
         description: "Biblioteca para administración y procesos del sistema.",
         url: "https://github.com/m4n14ck/process",
         tags: ["Rust", "Systems"]
+    },
+    {
+        name: "File Manager in Rust",
+        icon: "⚙️",
+        description: "Un administrador de archivos interactivo con detección automática de archivos y selección mediante números.",
+        url: "https://github.com/m4n14ck/rust-file-manager",
+        tags: ["Rust", "Systems, manager"]
     }
 ];
 
