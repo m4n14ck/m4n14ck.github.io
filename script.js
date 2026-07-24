@@ -1,11 +1,11 @@
 // Datos de proyectos
 const rustProjects = [
     {
-        name: "Curso Rust",
+        name: "Programas basicos Rust",
         icon: "🦀",
-        description: "Curso introductorio de Rust en español, organizado en lecciones (carpetas 1_Leccion a 7_Leccion) con ejemplos prácticos de código",
+        description: "Curso introductorio de Rust en español con ejemplos prácticos de código, organizado en lecciones (carpetas 1_Leccion a 7_Leccion) ",
         url: "https://github.com/m4n14ck/Rust",
-        tags: ["Rust", "CLI", "Curso"]
+        tags: ["Rust", "CLI", "Codigo"]
     },
     {
         name: "md5-tool",
@@ -27,6 +27,13 @@ const rustProjects = [
         description: "Un administrador de archivos interactivo con detección automática de archivos y selección mediante números.",
         url: "https://github.com/m4n14ck/rust-file-manager",
         tags: ["Rust", "Systems, manager"]
+    },
+    {
+        name: "Introduccion a Rust",
+        icon: "📚",
+        description: "Curso práctico de introducción a Rust, creado para personas que desean aprender el lenguaje desde cero y avanzar progresivamente hacia conceptos más importantes.",
+        url: "https://github.com/m4n14ck/Introduccion_a_rust",
+        tags: ["Rust", "PDF, Curso"]
     }
 ];
 
