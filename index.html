@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+    <meta name="referrer" content="no-referrer">
+    <title>M4n14ck - Open Source Projects</title>
+    <meta name="description" content="Open source projects by M4n14ck - Rust and other tools">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-gradient">
+        <div class="glow-orb glow-orb-1"></div>
+        <div class="glow-orb glow-orb-2"></div>
+        <div class="glow-orb glow-orb-3"></div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="nav-container">
+                <a href="#" class="logo">m4n14ck</a>
+                <ul class="nav-links">
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="rust-quest-game/">Rust Quest</a></li>
+                    <li><a href="https://github.com/m4n14ck" target="_blank" rel="noopener">GitHub</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="quest-banner">
+            <div class="quest-content">
+                <span class="quest-label">// INTERACTIVE RUST TRAINING</span>
+                <h1>Aprende Rust jugando</h1>
+                <p>Completa misiones, escribe código simulado y desbloquea nuevos conceptos sin instalar nada.</p>
+                <a href="rust-quest-game/" class="quest-button">INICIAR RUST QUEST <span>→</span></a>
+            </div>
+            <div class="quest-terminal" aria-hidden="true">
+                <div class="terminal-header"><i></i><i></i><i></i><span>main.rs</span></div>
+                <pre><span class="code-key">fn</span> main() {
+    <span class="code-key">let mut</span> nivel = 1;
+    nivel += 1;
+    println!(<span class="code-string">"Misión iniciada"</span>);
+}</pre>
+                <div class="terminal-status">✓ SISTEMA LISTO</div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="section-header">
+                <h2>Featured Projects</h2>
+                <p>Una selección de mis herramientas y frameworks.</p>
+            </div>
+            <div class="category">
+                <h3>🦀 Rust Projects</h3>
+                <div class="projects-grid" id="rust-projects"></div>
+            </div>
+            <div class="category">
+                <h3>💻 Other Projects</h3>
+                <div class="projects-grid" id="other-projects"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer><p>© 2026 <span>m4n14ck</span>. Hecho con ❤️ y mucho Rust</p></footer>
+    <script src="script.js"></script>
+</body>
+</html>
