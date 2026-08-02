@@ -116,6 +116,7 @@ function updateTimer(){
 
 function startCompetition(){
   const level=levels[selectedLevel];
+  document.body.classList.add("competition-active");
   clearInterval(timerId);
   activeChallenges=shuffle(level.challenges);
   challengeIndex=0;score=0;secondsLeft=level.seconds;running=true;
@@ -130,6 +131,7 @@ function startCompetition(){
 
 function finishCompetition(reason){
   if(!running)return;
+  document.body.classList.remove("competition-active");
   running=false;clearInterval(timerId);timerId=null;
   const level=levels[selectedLevel];
   const challenge=activeChallenges[Math.min(challengeIndex,activeChallenges.length-1)];
@@ -154,8 +156,8 @@ function finishCompetition(reason){
 
 document.querySelectorAll("[data-level]").forEach(button=>button.addEventListener("click",()=>selectLevel(button.dataset.level)));
 $("startCompetition").addEventListener("click",startCompetition);
-$("newCompetition").addEventListener("click",()=>{$("competitionResults").classList.add("hidden");$("competitionSetup").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"})});
-$("leaveCompetition").addEventListener("click",()=>{if(!running)return;running=false;clearInterval(timerId);timerId=null;$("competitionArena").classList.add("hidden");$("competitionSetup").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"})});
+$("newCompetition").addEventListener("click",()=>{document.body.classList.remove("competition-active");$("competitionResults").classList.add("hidden");$("competitionSetup").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"})});
+$("leaveCompetition").addEventListener("click",()=>{if(!running)return;document.body.classList.remove("competition-active");running=false;clearInterval(timerId);timerId=null;$("competitionArena").classList.add("hidden");$("competitionSetup").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"})});
 $("checkSolution").addEventListener("click",()=>{
   if(!running||challengeIndex>=activeChallenges.length)return;
   const challenge=activeChallenges[challengeIndex];
