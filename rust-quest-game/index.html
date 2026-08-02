@@ -8,6 +8,7 @@
     <meta name="description" content="Aprende los fundamentos de Rust mediante misiones interactivas">
     <title>Rust Quest | m4n14ck</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../themes.css">
     <style>
         .learning-block {
             margin-top: 16px;
@@ -499,6 +500,86 @@
             background: rgba(225, 122, 67, .2);
             outline: none;
         }
+        .theme-picker {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            min-height: 38px;
+            padding: 0 9px;
+            border: 1px solid var(--n-line, #343129);
+            border-radius: 4px;
+            background: var(--n-panel, #151410);
+        }
+        .theme-picker span { color: var(--n-muted, #aaa397); font: 700 8px monospace; letter-spacing: .8px; }
+        .theme-picker::before {
+            content: "";
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--n-accent, #88c0d0);
+            box-shadow: 0 0 9px color-mix(in srgb, var(--n-accent, #88c0d0) 55%, transparent);
+        }
+        #themeSelector {
+            max-width: 130px;
+            border: 0;
+            outline: 0;
+            color: var(--n-text, #eceff4);
+            background: transparent;
+            cursor: pointer;
+            font: 700 9px monospace;
+        }
+        #themeSelector option { color: #eceff4; background: #2e3440; }
+
+        body[data-theme="nord-classic"] { --n-bg:#2e3440;--n-panel:#3b4252;--n-surface:#434c5e;--n-editor:#242933;--n-line:#4c566a;--n-accent:#88c0d0;--n-accent2:#81a1c1;--n-text:#eceff4;--n-muted:#d8dee9;--n-success:#a3be8c;--n-warning:#ebcb8b;--n-danger:#bf616a; }
+        body[data-theme="polar-night"] { --n-bg:#1f232b;--n-panel:#292e39;--n-surface:#353c4a;--n-editor:#171a20;--n-line:#465062;--n-accent:#81a1c1;--n-accent2:#5e81ac;--n-text:#e5e9f0;--n-muted:#aeb8c6;--n-success:#8fbc8f;--n-warning:#d7ba7d;--n-danger:#bf616a; }
+        body[data-theme="frost-blue"] { --n-bg:#27313d;--n-panel:#32404e;--n-surface:#3c4d5d;--n-editor:#1e2730;--n-line:#526779;--n-accent:#8fbcbb;--n-accent2:#88c0d0;--n-text:#edf3f5;--n-muted:#cbd7dc;--n-success:#a3be8c;--n-warning:#ebcb8b;--n-danger:#d57780; }
+        body[data-theme="aurora-violet"] { --n-bg:#302d3d;--n-panel:#3d394d;--n-surface:#4a455b;--n-editor:#24212e;--n-line:#625b76;--n-accent:#b48ead;--n-accent2:#88c0d0;--n-text:#f0ebf4;--n-muted:#d3c9d8;--n-success:#a3be8c;--n-warning:#ebcb8b;--n-danger:#d08770; }
+        body[data-theme="snow-storm"] { --n-bg:#d8dee9;--n-panel:#eceff4;--n-surface:#e5e9f0;--n-editor:#2e3440;--n-line:#b8c2d1;--n-accent:#5e81ac;--n-accent2:#4c6f98;--n-text:#2e3440;--n-muted:#4c566a;--n-success:#668b5d;--n-warning:#a66f25;--n-danger:#a94f5a; }
+        body[data-theme="arctic-cyan"] { --n-bg:#24343a;--n-panel:#2e4248;--n-surface:#395159;--n-editor:#19272b;--n-line:#4f6d75;--n-accent:#8fbcbb;--n-accent2:#63a8b0;--n-text:#ecf4f4;--n-muted:#c1d2d2;--n-success:#a3be8c;--n-warning:#ebcb8b;--n-danger:#d08770; }
+        body[data-theme="northern-lights"] { --n-bg:#29352f;--n-panel:#35443d;--n-surface:#415349;--n-editor:#1c2721;--n-line:#526a5d;--n-accent:#a3be8c;--n-accent2:#8fbcbb;--n-text:#eef4ed;--n-muted:#cad6c8;--n-success:#b3d39a;--n-warning:#ebcb8b;--n-danger:#d08770; }
+        body[data-theme="deep-ocean"] { --n-bg:#182633;--n-panel:#213445;--n-surface:#2b4356;--n-editor:#101c26;--n-line:#3c5c73;--n-accent:#88c0d0;--n-accent2:#5e81ac;--n-text:#e8f1f5;--n-muted:#b8cbd4;--n-success:#8fbc8f;--n-warning:#dcbf82;--n-danger:#bf616a; }
+        body[data-theme="ice-violet"] { --n-bg:#292c3b;--n-panel:#353849;--n-surface:#42465a;--n-editor:#1e202c;--n-line:#595e75;--n-accent:#b8a1d9;--n-accent2:#88c0d0;--n-text:#f0eef6;--n-muted:#cec9da;--n-success:#a3be8c;--n-warning:#ebcb8b;--n-danger:#c96f78; }
+        body[data-theme="ember-frost"] { --n-bg:#332c2d;--n-panel:#42383a;--n-surface:#514447;--n-editor:#261e20;--n-line:#6a565a;--n-accent:#d08770;--n-accent2:#88c0d0;--n-text:#f4eeec;--n-muted:#d8c9c5;--n-success:#a3be8c;--n-warning:#ebcb8b;--n-danger:#bf616a; }
+
+        body[data-theme] {
+            color: var(--n-text);
+            background-color: var(--n-bg);
+            background-image: linear-gradient(color-mix(in srgb,var(--n-text) 4%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--n-text) 4%,transparent) 1px,transparent 1px);
+        }
+        body[data-theme] header { border-color: var(--n-line); background: color-mix(in srgb,var(--n-bg) 92%,transparent); }
+        body[data-theme] .brand { color: var(--n-muted); }
+        body[data-theme] .brand strong, body[data-theme] .stats b, body[data-theme] .intro>div>span, body[data-theme] .brief>span, body[data-theme] .intro h1 em, body[data-theme] .category h3 { color: var(--n-accent); }
+        body[data-theme] .intro p, body[data-theme] .progress span, body[data-theme] aside h2 { color: var(--n-muted); }
+        body[data-theme] .progress div { background: var(--n-line); }
+        body[data-theme] .progress i { background: var(--n-accent); }
+        body[data-theme] aside, body[data-theme] .brief, body[data-theme] .terminal, body[data-theme] .console, body[data-theme] .hint, body[data-theme] .learning-block, body[data-theme] .practice-zone { border-color: var(--n-line); background-color: var(--n-panel); }
+        body[data-theme] .mission:hover:not(.locked), body[data-theme] .mission.active { border-color: var(--n-accent); background: color-mix(in srgb,var(--n-accent) 13%,transparent); }
+        body[data-theme] .mission>b, body[data-theme] .actions button, body[data-theme] .next { border-color: var(--n-line); }
+        body[data-theme] .mission em, body[data-theme] .objective b, body[data-theme] .next { color: var(--n-accent); }
+        body[data-theme] .mission.done>b, body[data-theme] .console pre { color: var(--n-success); }
+        body[data-theme] .objective { border-color: var(--n-accent)!important; background: color-mix(in srgb,var(--n-accent) 8%,var(--n-panel)); box-shadow: 0 0 24px color-mix(in srgb,var(--n-accent) 10%,transparent); }
+        body[data-theme] .explanation { border-left-color: var(--n-accent2); background: color-mix(in srgb,var(--n-accent2) 7%,var(--n-panel)); }
+        body[data-theme] .explanation>b, body[data-theme] .growth>b { color: var(--n-accent2); }
+        body[data-theme] .example { border-left-color: var(--n-success); background: color-mix(in srgb,var(--n-success) 6%,var(--n-panel)); }
+        body[data-theme] .example>b, body[data-theme] .example pre { color: var(--n-success); }
+        body[data-theme] .growth { border-left-color: var(--n-accent); background: color-mix(in srgb,var(--n-accent) 7%,var(--n-panel)); }
+        body[data-theme] .learning-block p, body[data-theme] .tips-list li, body[data-theme] .growth-goal { color: var(--n-muted)!important; }
+        body[data-theme] .key-points, body[data-theme] .tips-list li, body[data-theme] .example-card, body[data-theme] .practice-card, body[data-theme] .practice-stat { border-color: var(--n-line); background: color-mix(in srgb,var(--n-surface) 55%,var(--n-panel)); }
+        body[data-theme] .common-error { color: var(--n-warning); border-color: var(--n-warning); background: color-mix(in srgb,var(--n-warning) 8%,transparent); }
+        body[data-theme] .common-error::before { color: var(--n-warning); }
+        body[data-theme] .editor { background: var(--n-editor); }
+        body[data-theme] .bar, body[data-theme] .actions { border-color: var(--n-line); }
+        body[data-theme] .actions button:last-child, body[data-theme] .open-ide { color: var(--n-bg); border-color: var(--n-accent); background: var(--n-accent); }
+        body[data-theme] .actions button:hover, body[data-theme] .next:hover { border-color: var(--n-accent); }
+        body[data-theme] .practice-start, body[data-theme] .practice-submit, body[data-theme] .practice-retry { color: var(--n-bg); border-color: var(--n-success); background: var(--n-success); }
+        body[data-theme] .practice-kicker, body[data-theme] .practice-stat b { color: var(--n-success); }
+        body[data-theme] .practice-stat.timer b { color: var(--n-accent); }
+        body[data-theme] #practiceCode { color: #e5e9f0; border-color: var(--n-line); background: var(--n-editor); }
+        body[data-theme] .reset-course { color: var(--n-danger); border-color: color-mix(in srgb,var(--n-danger) 65%,var(--n-line)); background: color-mix(in srgb,var(--n-danger) 9%,transparent); }
+        body[data-theme] .visitor-count, body[data-theme] .back-ide { color: var(--n-muted); border-color: var(--n-line); background: var(--n-panel); }
+        body[data-theme] .visitor-count b { color: var(--n-success); }
+        body[data-theme] .ide-window { color: var(--n-text); background: var(--n-bg); }
+        body[data-theme] .ide-mission-brief { border-color: var(--n-line); background: var(--n-panel); }
         .back-ide {
             min-height: 30px;
             margin-left: auto;
@@ -604,6 +685,7 @@
             .header-actions { margin-left: auto; gap: 8px; }
             .stats { gap: 10px; }
             .visitor-count { min-height: 44px; }
+            .theme-picker { min-height: 44px; }
             .reset-course { min-height: 44px; }
             aside { max-height: none; overflow: visible; }
             #missions {
@@ -619,12 +701,18 @@
         @media (max-width: 600px) {
             header .brand { font-size: 10px; }
             header .title { display: none; }
+            .header-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
             .stats { font-size: 8px; }
             .stats span { white-space: nowrap; }
+            .stats, .theme-picker, .visitor-count, .reset-course { width: 100%; min-height: 44px; justify-content: center; }
+            .stats { padding: 0 8px; border: 1px solid var(--n-line); border-radius: 4px; background: var(--n-panel); }
             .visitor-count { padding: 0 8px; font-size: 0; }
             .visitor-count::before { content: "👁 VISITAS"; font-size: 8px; }
             .visitor-count b { font-size: 9px; }
             .reset-course { padding: 0 9px; font-size: 8px; letter-spacing: .7px; }
+            .header-actions .reset-course { grid-column: 1 / -1; }
+            .theme-picker span { display: none; }
+            #themeSelector { max-width: 105px; font-size: 8px; }
             .back-ide { padding: 0 8px; font-size: 7px; }
             .intro { padding: 34px 16px 26px; }
             .intro h1 { font-size: clamp(32px, 11vw, 48px); }
@@ -680,7 +768,7 @@
         }
     </style>
 </head>
-<body>
+<body class="rust-quest-page" data-theme="nord-classic">
     <header>
         <a href="../" class="brand">← <strong>m4n14ck</strong></a>
         <div class="title"><b>RUST QUEST</b><span>CODE TO SURVIVE</span></div>
@@ -790,6 +878,7 @@ Sistema preparado. Selecciona una misión.</pre></div>
             </div>
         </section>
     </main>
+    <script src="../themes.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

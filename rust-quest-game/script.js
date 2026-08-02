@@ -544,7 +544,6 @@ const save = () => localStorage.setItem(storageKey, JSON.stringify(state));
 const unlocked = index => index === 0 || state.done.includes(index - 1);
 const pad = value => String(value).padStart(2, "0");
 const visitCounterKey = "m4n14ck_github_io_rust_quest_visits_2026";
-
 async function loadVisitCount() {
   const display = $("visitorCount");
   const countedThisSession = sessionStorage.getItem("rustQuestVisitCounted") === "yes";
