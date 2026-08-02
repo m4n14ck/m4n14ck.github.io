@@ -71,19 +71,28 @@
                 <div class="requirement"><span>🎯</span><p><b>Tu misión:</b> cumple exactamente el requisito indicado. Puedes modificar todo el código del editor.</p></div>
             </article>
 
-            <section class="ide-window" aria-label="IDE simulado de Rust">
-                <div class="ide-bar"><span class="dots"><i></i><i></i><i></i></span><b>main.rs</b><small>RUST · SIMULADO</small></div>
-                <div class="editor-shell">
-                    <pre id="competitionLines" class="line-numbers" aria-hidden="true"></pre>
-                    <pre id="competitionHighlight" class="syntax-layer" aria-hidden="true"></pre>
-                    <textarea id="competitionCode" wrap="off" spellcheck="false" autocomplete="off" aria-label="Editor de código Rust"></textarea>
-                </div>
-                <div class="ide-footer">
-                    <span>TAB = 4 ESPACIOS</span>
-                    <button id="checkSolution" class="primary-button" type="button">▶ EJECUTAR Y COMPROBAR</button>
-                </div>
-            </section>
-            <div id="competitionFeedback" class="feedback" aria-live="assertive">El IDE está listo. Escribe tu solución y ejecútala.</div>
+            <div class="ide-workspace">
+                <section class="ide-window" aria-label="IDE simulado de Rust">
+                    <div class="ide-bar"><span class="dots"><i></i><i></i><i></i></span><b>main.rs</b><small>RUST · SIMULADO</small></div>
+                    <div class="editor-shell">
+                        <pre id="competitionLines" class="line-numbers" aria-hidden="true"></pre>
+                        <pre id="competitionHighlight" class="syntax-layer" aria-hidden="true"></pre>
+                        <textarea id="competitionCode" wrap="off" spellcheck="false" autocomplete="off" aria-label="Editor de código Rust"></textarea>
+                    </div>
+                    <div class="ide-footer">
+                        <span>RUST · UTF-8 · TAB = 4 ESPACIOS</span>
+                        <div class="editor-actions">
+                            <button id="resetChallenge" class="ghost-button" type="button">REINICIAR</button>
+                            <button id="checkSolution" class="primary-button" type="button">▶ EJECUTAR Y COMPROBAR</button>
+                        </div>
+                    </div>
+                </section>
+                <aside class="console-panel" aria-label="Consola de resultado">
+                    <div class="console-heading"><span>CONSOLA · RESULTADO</span><i id="consoleStatus">LISTO</i></div>
+                    <div id="competitionFeedback" class="feedback" aria-live="assertive"><b>&gt; Sistema preparado</b><p>Escribe tu solución y pulsa “Ejecutar y comprobar”.</p></div>
+                    <div class="console-help"><span>La ejecución es simulada</span><small>Tu código se valida de forma segura en el navegador.</small></div>
+                </aside>
+            </div>
         </section>
 
         <section id="competitionResults" class="competition-shell results-screen hidden" aria-live="polite">

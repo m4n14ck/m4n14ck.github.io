@@ -67,6 +67,12 @@ function renderEditor(){
 }
 function syncEditorScroll(){const editor=$("competitionCode");$("competitionHighlight").scrollTop=editor.scrollTop;$("competitionHighlight").scrollLeft=editor.scrollLeft;$("competitionLines").scrollTop=editor.scrollTop}
 
+function setConsole(status,message,type=""){
+  $("consoleStatus").textContent=status;
+  $("competitionFeedback").textContent=message;
+  $("competitionFeedback").className=`feedback${type?` ${type}`:""}`;
+}
+
 function selectLevel(name){
   if(running||!levels[name])return;
   selectedLevel=name;
@@ -82,8 +88,9 @@ function renderChallenge(){
   $("challengeTitle").textContent=challenge.title;
   $("challengeObjective").textContent=challenge.objective;
   $("competitionCode").value=challenge.starter;
-  $("competitionFeedback").textContent="El IDE está listo. Escribe tu solución y ejecútala.";
-  $("competitionFeedback").className="feedback";
+  $("checkSolution").disabled=false;
+  $("resetChallenge").disabled=false;
+  setConsole("LISTO","> Sistema preparado\n\nEscribe tu solución y pulsa “Ejecutar y comprobar”.");
   renderEditor();
   requestAnimationFrame(()=>$("competitionCode").focus());
 }
@@ -136,11 +143,18 @@ $("startCompetition").addEventListener("click",startCompetition);
 $("newCompetition").addEventListener("click",()=>{$("competitionResults").classList.add("hidden");$("competitionSetup").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"})});
 $("leaveCompetition").addEventListener("click",()=>{if(!running)return;running=false;clearInterval(timerId);timerId=null;$("competitionArena").classList.add("hidden");$("competitionSetup").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"})});
 $("checkSolution").addEventListener("click",()=>{
-  if(!running)return;
+  if(!running||challengeIndex>=activeChallenges.length)return;
   const challenge=activeChallenges[challengeIndex];
-  if(!challenge.valid($("competitionCode").value)){$("competitionFeedback").textContent="Todavía falta algún requisito. Revisa nombres, símbolos, llaves y puntos y coma.";$("competitionFeedback").className="feedback error";return}
-  score++;challengeIndex++;$("competitionScore").textContent=score*100;$("competitionFeedback").textContent="✓ Solución correcta. Preparando el siguiente reto…";$("competitionFeedback").className="feedback ok";
-  if(challengeIndex>=activeChallenges.length){clearInterval(timerId);timerId=null;setTimeout(()=>finishCompetition("complete"),500)}else{setTimeout(()=>{if(running)renderChallenge()},500)}
+  if(!challenge.valid($("competitionCode").value)){setConsole("ERROR","[ERROR DE VALIDACIÓN]\n\nNo se encontró todo lo solicitado en el objetivo.\n\nRevisa los nombres, operadores, llaves y puntos y coma.","error");return}
+  score++;challengeIndex++;$("checkSolution").disabled=true;$("resetChallenge").disabled=true;$("competitionScore").textContent=score*100;setConsole("CORRECTO",`[EJECUCIÓN COMPLETADA]\n\n${challenge.output}\n\n✓ Reto superado · +100 puntos`,"ok");
+  if(challengeIndex>=activeChallenges.length){clearInterval(timerId);timerId=null;setTimeout(()=>finishCompetition("complete"),1100)}else{setTimeout(()=>{if(running)renderChallenge()},1100)}
+});
+$("resetChallenge").addEventListener("click",()=>{
+  if(!running||challengeIndex>=activeChallenges.length)return;
+  $("competitionCode").value=activeChallenges[challengeIndex].starter;
+  renderEditor();
+  setConsole("REINICIADO","> Código restaurado\n\nPuedes comenzar nuevamente este reto.");
+  $("competitionCode").focus();
 });
 $("competitionCode").addEventListener("input",renderEditor);
 $("competitionCode").addEventListener("scroll",syncEditorScroll);

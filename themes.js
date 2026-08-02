@@ -34,6 +34,8 @@
 
         const currentName = document.getElementById("currentThemeName");
         if (currentName) currentName.textContent = themeName(selected);
+        const themeToggle = document.getElementById("globalThemeToggle");
+        if (themeToggle) themeToggle.title = `Cambiar tema · ${themeName(selected)}`;
 
         document.querySelectorAll(".theme-option").forEach(option => {
             const active = option.dataset.themeOption === selected;
@@ -115,6 +117,8 @@
         toggle.id = "globalThemeToggle";
         toggle.className = "global-theme-toggle";
         toggle.type = "button";
+        toggle.title = "Cambiar tema · Nord Clásico";
+        toggle.setAttribute("aria-label", "Abrir selector de temas");
         toggle.setAttribute("aria-controls", "globalThemePanel");
         toggle.setAttribute("aria-expanded", "false");
 
