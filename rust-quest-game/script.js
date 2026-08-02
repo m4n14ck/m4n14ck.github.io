@@ -977,54 +977,67 @@ $("next").onclick = () => {
   }
 };
 
-const practiceChallenges = [
-  {
-    title: "Reto 1 · Variable de energía",
-    objective: "Crea una variable llamada energia con el valor 100 usando let.",
-    starter: "fn main() {\n    // Escribe tu solución\n}",
-    valid: code => /\blet\s+energia\s*=\s*100\s*;/.test(code)
+const practiceLevels = {
+  easy: {
+    label: "FÁCIL", seconds: 90,
+    challenges: [
+      {title:"Variable de energía",objective:"Crea una variable llamada energia con el valor 100 usando let.",starter:"fn main() {\n    // Crea la variable\n}",valid:code=>/\blet\s+energia\s*=\s*100\s*;/.test(code)},
+      {title:"Mensaje de inicio",objective:'Usa println! para mostrar exactamente "Rust listo".',starter:'fn main() {\n    println!("");\n}',valid:code=>/println!\s*\(\s*"Rust listo"\s*\)\s*;/.test(code)},
+      {title:"Acceso por nivel",objective:"Crea un if que compruebe si nivel es mayor o igual que 5.",starter:"fn main() {\n    let nivel = 7;\n    // Crea la condición\n}",valid:code=>/\bif\s+nivel\s*>=\s*5\s*\{/.test(code)},
+      {title:"Rango completo",objective:"Usa for con la variable numero para recorrer del 1 al 5, incluyendo el 5.",starter:"fn main() {\n    // Crea el ciclo\n}",valid:code=>/\bfor\s+numero\s+in\s+1\s*\.\.=\s*5\s*\{/.test(code)},
+      {title:"Puntos mutables",objective:"Crea puntos con let mut y valor 10; después aumenta 5 mediante +=.",starter:"fn main() {\n    // Crea y aumenta puntos\n}",valid:code=>/let\s+mut\s+puntos\s*=\s*10\s*;/.test(code)&&/puntos\s*\+=\s*5\s*;/.test(code)}
+    ]
   },
-  {
-    title: "Reto 2 · Acceso concedido",
-    objective: "Crea una condición que compruebe si nivel es mayor o igual que 5.",
-    starter: "fn main() {\n    let nivel = 7;\n    // Crea la condición\n}",
-    valid: code => /\bif\s+nivel\s*>=\s*5\s*\{/.test(code)
+  medium: {
+    label: "MEDIO", seconds: 120,
+    challenges: [
+      {title:"Función sumar",objective:"Declara sumar con dos parámetros i32 y devuelve i32.",starter:"// Declara la función sumar\n",valid:code=>/fn\s+sumar\s*\([^)]*:\s*i32\s*,[^)]*:\s*i32\s*\)\s*->\s*i32\s*\{/.test(code)},
+      {title:"Vector dinámico",objective:"Crea numeros como vec![1, 2, 3] mutable y agrega 4 mediante push.",starter:"fn main() {\n    // Crea y modifica el vector\n}",valid:code=>/let\s+mut\s+numeros\s*=\s*vec!\s*\[\s*1\s*,\s*2\s*,\s*3\s*\]\s*;/.test(code)&&/numeros\s*\.\s*push\s*\(\s*4\s*\)\s*;/.test(code)},
+      {title:"String ampliable",objective:'Crea mensaje con String::from("Hola") y añade " Rust" usando push_str.',starter:"fn main() {\n    // Crea y amplía el String\n}",valid:code=>/let\s+mut\s+mensaje\s*=\s*String\s*::\s*from\s*\(\s*"Hola"\s*\)\s*;/.test(code)&&/mensaje\s*\.\s*push_str\s*\(\s*" Rust"\s*\)\s*;/.test(code)},
+      {title:"Código HTTP",objective:'Usa match con codigo: 200 muestra "OK" y _ muestra "Error".',starter:"fn main() {\n    let codigo = 200;\n    // Crea el match\n}",valid:code=>/match\s+codigo\s*\{[\s\S]*?200\s*=>[\s\S]*?"OK"[\s\S]*?_\s*=>[\s\S]*?"Error"/.test(code)},
+      {title:"Modelo Usuario",objective:"Declara struct Usuario con nombre: String y nivel: u32.",starter:"// Declara la estructura\n\nfn main() {}",valid:code=>/struct\s+Usuario\s*\{[\s\S]*?nombre\s*:\s*String\s*,?[\s\S]*?nivel\s*:\s*u32/.test(code)}
+    ]
   },
-  {
-    title: "Reto 3 · Recorre el rango",
-    objective: "Usa for para recorrer los números del 1 al 5, incluyendo el 5.",
-    starter: "fn main() {\n    // Crea el ciclo\n}",
-    valid: code => /\bfor\s+\w+\s+in\s+1\s*\.\.=\s*5\s*\{/.test(code)
-  },
-  {
-    title: "Reto 4 · Función sumar",
-    objective: "Declara una función llamada sumar que reciba dos i32 y devuelva i32.",
-    starter: "// Declara la función sumar\n",
-    valid: code => /\bfn\s+sumar\s*\([^)]*:\s*i32\s*,[^)]*:\s*i32\s*\)\s*->\s*i32\s*\{/.test(code)
-  },
-  {
-    title: "Reto 5 · Vector mutable",
-    objective: "Crea un vector mutable llamado numeros con vec![1, 2, 3].",
-    starter: "fn main() {\n    // Crea el vector\n}",
-    valid: code => /\blet\s+mut\s+numeros\s*=\s*vec!\s*\[\s*1\s*,\s*2\s*,\s*3\s*\]\s*;/.test(code)
+  advanced: {
+    label: "AVANZADO", seconds: 180,
+    challenges: [
+      {title:"Transferir propiedad",objective:"Crea origen como String, mueve su propiedad a destino e imprime destino.",starter:"fn main() {\n    // Crea, mueve e imprime\n}",valid:code=>/let\s+origen\s*=\s*String\s*::\s*from\s*\([^)]+\)\s*;/.test(code)&&/let\s+destino\s*=\s*origen\s*;/.test(code)&&/println!\s*\([^;]*destino/.test(code)},
+      {title:"Préstamo inmutable",objective:"Crea longitud(texto: &String) -> usize y devuelve texto.len().",starter:"// Crea una función que pida prestado el String\n",valid:code=>/fn\s+longitud\s*\(\s*texto\s*:\s*&\s*String\s*\)\s*->\s*usize\s*\{[\s\S]*?texto\s*\.\s*len\s*\(\s*\)/.test(code)},
+      {title:"Resultado controlado",objective:"Usa match resultado y maneja tanto Ok(valor) como Err(error).",starter:'fn main() {\n    let resultado: Result<i32, &str> = Ok(10);\n    // Maneja ambos casos\n}',valid:code=>/match\s+resultado\s*\{[\s\S]*?Ok\s*\(\s*valor\s*\)\s*=>[\s\S]*?Err\s*\(\s*error\s*\)\s*=>/.test(code)},
+      {title:"Método de área",objective:"Implementa area(&self) -> u32 para Rectangulo y devuelve ancho * alto.",starter:"struct Rectangulo {\n    ancho: u32,\n    alto: u32,\n}\n\n// Crea impl Rectangulo\n",valid:code=>/impl\s+Rectangulo\s*\{[\s\S]*?fn\s+area\s*\(\s*&\s*self\s*\)\s*->\s*u32[\s\S]*?self\s*\.\s*ancho\s*\*\s*self\s*\.\s*alto/.test(code)},
+      {title:"Eliminar duplicación",objective:'Crea mostrar_estado(estado: &str) y llámala con "Activo" e "Inactivo".',starter:"fn main() {\n    // Reutiliza una sola función\n}\n\n// Crea mostrar_estado\n",valid:code=>/fn\s+mostrar_estado\s*\(\s*estado\s*:\s*&str\s*\)/.test(code)&&/mostrar_estado\s*\(\s*"Activo"\s*\)\s*;/.test(code)&&/mostrar_estado\s*\(\s*"Inactivo"\s*\)\s*;/.test(code)}
+    ]
   }
-];
+};
 
+let selectedPracticeLevel = "easy";
+let activePracticeChallenges = [];
 let practiceTimerId = null;
-let practiceSeconds = 300;
+let practiceSeconds = practiceLevels.easy.seconds;
 let practiceIndex = 0;
 let practiceScore = 0;
 let practiceActive = false;
 
+function formatPracticeTime(totalSeconds) {
+  return `${pad(Math.floor(totalSeconds / 60))}:${pad(totalSeconds % 60)}`;
+}
+
+function shuffledChallenges(challenges) {
+  const result = [...challenges];
+  for (let index = result.length - 1; index > 0; index--) {
+    const target = Math.floor(Math.random() * (index + 1));
+    [result[index], result[target]] = [result[target], result[index]];
+  }
+  return result;
+}
+
 function updatePracticeTimer() {
-  const minutes = Math.floor(practiceSeconds / 60);
-  const seconds = practiceSeconds % 60;
-  $("practiceTimer").textContent = `${pad(minutes)}:${pad(seconds)}`;
+  $("practiceTimer").textContent = formatPracticeTime(practiceSeconds);
 }
 
 function renderPracticeChallenge() {
-  const challenge = practiceChallenges[practiceIndex];
-  $("practiceProgress").textContent = `${practiceIndex + 1} / ${practiceChallenges.length}`;
+  const challenge = activePracticeChallenges[practiceIndex];
+  $("practiceProgress").textContent = `${practiceIndex + 1} / ${activePracticeChallenges.length}`;
   $("practiceScore").textContent = practiceScore;
   $("practiceTitle").textContent = challenge.title;
   $("practiceObjective").textContent = challenge.objective;
@@ -1034,28 +1047,39 @@ function renderPracticeChallenge() {
 }
 
 function finishPractice(reason) {
+  if (!practiceActive) return;
   practiceActive = false;
   clearInterval(practiceTimerId);
   practiceTimerId = null;
   $("practiceChallenge").classList.add("hidden");
   $("practiceResult").classList.remove("hidden");
-  $("practiceFinalScore").textContent = `${practiceScore} / ${practiceChallenges.length}`;
+  document.querySelectorAll("[data-practice-level]").forEach(button => button.disabled = false);
+  $("startPractice").disabled = false;
+  $("startPractice").textContent = `INICIAR DE NUEVO · ${formatPracticeTime(practiceLevels[selectedPracticeLevel].seconds)} →`;
+  $("practiceFinalScore").textContent = `${practiceScore} / ${activePracticeChallenges.length}`;
   $("practiceFinalMessage").textContent = reason === "time"
     ? "El tiempo terminó. Revisa los conceptos y vuelve a intentarlo."
-    : practiceScore === practiceChallenges.length
-      ? "¡Entrenamiento perfecto! Completaste todos los retos a tiempo."
+    : practiceScore === activePracticeChallenges.length
+      ? `¡Competencia ${practiceLevels[selectedPracticeLevel].label.toLowerCase()} perfecta! Completaste todos los retos a tiempo.`
       : "Práctica terminada. Cada intento hará que escribas Rust con más confianza.";
 }
 
 function startPractice() {
+  if (practiceActive) return;
+  const level = practiceLevels[selectedPracticeLevel];
   clearInterval(practiceTimerId);
-  practiceSeconds = 300;
+  activePracticeChallenges = shuffledChallenges(level.challenges);
+  practiceSeconds = level.seconds;
   practiceIndex = 0;
   practiceScore = 0;
   practiceActive = true;
+  document.querySelectorAll("[data-practice-level]").forEach(button => button.disabled = true);
+  $("startPractice").disabled = true;
+  $("startPractice").textContent = "COMPETENCIA EN CURSO…";
   $("practicePanel").classList.remove("hidden");
   $("practiceChallenge").classList.remove("hidden");
   $("practiceResult").classList.add("hidden");
+  $("practiceDifficulty").textContent = level.label;
   updatePracticeTimer();
   renderPracticeChallenge();
   practiceTimerId = setInterval(() => {
@@ -1067,11 +1091,30 @@ function startPractice() {
   requestAnimationFrame(() => $("practiceCode").focus());
 }
 
+function selectPracticeLevel(levelName) {
+  if (practiceActive || !practiceLevels[levelName]) return;
+  selectedPracticeLevel = levelName;
+  const level = practiceLevels[levelName];
+  document.querySelectorAll("[data-practice-level]").forEach(button => {
+    const selected = button.dataset.practiceLevel === levelName;
+    button.classList.toggle("selected", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  });
+  practiceSeconds = level.seconds;
+  updatePracticeTimer();
+  $("practiceDifficulty").textContent = level.label;
+  $("startPractice").textContent = `INICIAR COMPETENCIA · ${formatPracticeTime(level.seconds)} →`;
+  $("practicePanel").classList.add("hidden");
+}
+
+document.querySelectorAll("[data-practice-level]").forEach(button => {
+  button.onclick = () => selectPracticeLevel(button.dataset.practiceLevel);
+});
 $("startPractice").onclick = startPractice;
 $("retryPractice").onclick = startPractice;
 $("submitPractice").onclick = () => {
   if (!practiceActive) return;
-  const challenge = practiceChallenges[practiceIndex];
+  const challenge = activePracticeChallenges[practiceIndex];
   if (!challenge.valid($("practiceCode").value)) {
     $("practiceFeedback").textContent = "Aún falta algún requisito. Revisa el nombre, los símbolos y el punto y coma.";
     $("practiceFeedback").className = "practice-feedback error";
@@ -1083,8 +1126,10 @@ $("submitPractice").onclick = () => {
   $("practiceFeedback").textContent = "✓ Solución correcta";
   $("practiceFeedback").className = "practice-feedback ok";
   practiceIndex++;
-  if (practiceIndex >= practiceChallenges.length) {
-    setTimeout(() => finishPractice("complete"), 450);
+  if (practiceIndex >= activePracticeChallenges.length) {
+    setTimeout(() => {
+      if (practiceActive) finishPractice("complete");
+    }, 450);
   } else {
     setTimeout(renderPracticeChallenge, 450);
   }
