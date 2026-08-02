@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Competencia contrarreloj de programación simulada en Rust">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+    <title>Competencia Rust | m4n14ck</title>
+    <link rel="stylesheet" href="../themes.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="rust-competition-page" data-theme="nord-classic">
+    <header class="topbar">
+        <a class="brand" href="../">m4n14ck</a>
+        <nav aria-label="Navegación principal">
+            <a href="../rust-quest-game/">← Volver al curso</a>
+            <a href="../">Inicio</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="competitionSetup" class="competition-shell setup-screen">
+            <span class="kicker">⚡ MODO CONTRARRELOJ</span>
+            <h1>Competencia Rust</h1>
+            <p class="lead">Pon a prueba lo aprendido resolviendo cinco retos en un IDE simulado. Elige el nivel, programa tu respuesta y supera tantos desafíos como puedas antes de que el reloj llegue a cero.</p>
+
+            <div class="difficulty-grid" role="group" aria-label="Selecciona la dificultad">
+                <button class="difficulty-card selected" type="button" data-level="easy" aria-pressed="true">
+                    <span class="number">01</span><span class="check">✓</span>
+                    <h2>Fácil</h2>
+                    <p>Sintaxis, variables, impresión, condiciones y ciclos básicos.</p>
+                    <span class="meta"><b>FUNDAMENTOS</b><strong>01:30</strong></span>
+                </button>
+                <button class="difficulty-card" type="button" data-level="medium" aria-pressed="false">
+                    <span class="number">02</span><span class="check">✓</span>
+                    <h2>Medio</h2>
+                    <p>Funciones, vectores, String, match y estructuras.</p>
+                    <span class="meta"><b>DESARROLLO</b><strong>02:00</strong></span>
+                </button>
+                <button class="difficulty-card" type="button" data-level="advanced" aria-pressed="false">
+                    <span class="number">03</span><span class="check">✓</span>
+                    <h2>Avanzado</h2>
+                    <p>Ownership, préstamos, Result, métodos y refactorización.</p>
+                    <span class="meta"><b>RUST ESENCIAL</b><strong>03:00</strong></span>
+                </button>
+            </div>
+
+            <div class="setup-actions">
+                <button id="startCompetition" class="primary-button" type="button">INICIAR COMPETENCIA · 01:30 →</button>
+                <p><strong>5 retos</strong> por partida · <strong>100 puntos</strong> por acierto</p>
+            </div>
+        </section>
+
+        <section id="competitionArena" class="competition-shell arena-screen hidden" aria-live="polite">
+            <div class="arena-heading">
+                <div><span class="kicker">⚙ COMPETENCIA EN CURSO</span><h1>Escribe tu solución</h1></div>
+                <button id="leaveCompetition" class="ghost-button" type="button">SALIR</button>
+            </div>
+
+            <div class="status-grid">
+                <div class="stat timer-stat"><span>TIEMPO RESTANTE</span><b id="competitionTimer">01:30</b></div>
+                <div class="stat"><span>DIFICULTAD</span><b id="competitionDifficulty">FÁCIL</b></div>
+                <div class="stat"><span>RETO</span><b id="competitionProgress">1 / 5</b></div>
+                <div class="stat"><span>PUNTOS</span><b id="competitionScore">0</b></div>
+            </div>
+
+            <article class="challenge-brief">
+                <span id="challengeTopic" class="challenge-topic">FUNDAMENTOS</span>
+                <h2 id="challengeTitle"></h2>
+                <p id="challengeObjective"></p>
+                <div class="requirement"><span>🎯</span><p><b>Tu misión:</b> cumple exactamente el requisito indicado. Puedes modificar todo el código del editor.</p></div>
+            </article>
+
+            <section class="ide-window" aria-label="IDE simulado de Rust">
+                <div class="ide-bar"><span class="dots"><i></i><i></i><i></i></span><b>main.rs</b><small>RUST · SIMULADO</small></div>
+                <div class="editor-shell">
+                    <pre id="competitionLines" class="line-numbers" aria-hidden="true"></pre>
+                    <pre id="competitionHighlight" class="syntax-layer" aria-hidden="true"></pre>
+                    <textarea id="competitionCode" wrap="off" spellcheck="false" autocomplete="off" aria-label="Editor de código Rust"></textarea>
+                </div>
+                <div class="ide-footer">
+                    <span>TAB = 4 ESPACIOS</span>
+                    <button id="checkSolution" class="primary-button" type="button">▶ EJECUTAR Y COMPROBAR</button>
+                </div>
+            </section>
+            <div id="competitionFeedback" class="feedback" aria-live="assertive">El IDE está listo. Escribe tu solución y ejecútala.</div>
+        </section>
+
+        <section id="competitionResults" class="competition-shell results-screen hidden" aria-live="polite">
+            <span id="resultKicker" class="kicker">TIEMPO AGOTADO</span>
+            <h1 id="resultTitle">0 de 5 resueltos</h1>
+            <p id="resultSubtitle" class="lead">Llegaste al problema 1 de 5.</p>
+
+            <div class="result-stats">
+                <div><span>PUNTOS</span><b id="resultPoints">0</b><small>+100 por acierto</small></div>
+                <div><span>TIEMPO MÁXIMO</span><b id="resultTime">1:30</b><small id="resultTimeNote">Nivel Fácil</small></div>
+                <div><span>PROGRESO</span><b id="resultProgress">0/5</b><small id="resultLevel">Fácil</small></div>
+            </div>
+
+            <div class="result-details">
+                <article class="improvement-card">
+                    <span>DÓNDE PUEDES MEJORAR</span>
+                    <h2 id="improvementTopic"></h2>
+                    <p id="improvementAdvice"></p>
+                </article>
+
+                <article id="easySolutionPanel" class="solution-card hidden">
+                    <span>💡 SOLUCIÓN DEL RETO</span>
+                    <h2 id="solutionTitle"></h2>
+                    <p>En el nivel Fácil te mostramos una posible solución para que compares la estructura y aprendas del intento.</p>
+                    <pre id="resultSolution"></pre>
+                    <b class="output-label">SALIDA ESPERADA</b>
+                    <code id="resultOutput"></code>
+                </article>
+
+                <article id="noSolutionPanel" class="solution-card no-solution hidden">
+                    <span>🔒 RETO PARA SEGUIR PRACTICANDO</span>
+                    <h2>La solución permanece oculta</h2>
+                    <p>En los niveles Medio y Avanzado no mostramos el código completo. Revisa el concepto recomendado, vuelve a intentarlo y compara tus propios enfoques.</p>
+                </article>
+            </div>
+
+            <div class="result-actions">
+                <button id="newCompetition" class="primary-button" type="button">GENERAR NUEVOS RETOS</button>
+                <a class="ghost-button" href="../rust-quest-game/">VOLVER AL CURSO</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="../themes.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
