@@ -49,14 +49,14 @@ function escapeHtml(text){return text.replace(/[&<>]/g,char=>({"&":"&amp;","<":"
 
 function highlightRust(code){
   const tokens=[];
-  const protectedCode=code.replace(/\/\/[^\n]*|"(?:\\.|[^"\\])*"/g,match=>{const key=`\u0000${tokens.length}\u0000`;tokens.push({text:match,type:match.startsWith("//")?"comment":"string"});return key});
+  const protectedCode=code.replace(/\/\/[^\n]*|"(?:\\.|[^"\\])*"/g,match=>{const key=String.fromCharCode(0xE000+tokens.length);tokens.push({text:match,type:match.startsWith("//")?"comment":"string"});return key});
   let html=escapeHtml(protectedCode)
     .replace(/\b(fn|let|mut|if|else|for|in|while|loop|match|struct|impl|return|pub|use|mod|enum|trait|where|move|ref|self|Self|as|const|static)\b/g,'<span class="tok-keyword">$1</span>')
     .replace(/\b(String|Result|Option|Vec|i8|i16|i32|i64|i128|u8|u16|u32|u64|u128|usize|isize|str|bool|Ok|Err|Some|None)\b/g,'<span class="tok-type">$1</span>')
     .replace(/\b(\d+)\b/g,'<span class="tok-number">$1</span>')
     .replace(/\b([A-Za-z_][A-Za-z0-9_]*)!/g,'<span class="tok-macro">$1!</span>')
     .replace(/\b(fn\s+)<span class="tok-keyword">([A-Za-z_][A-Za-z0-9_]*)<\/span>/g,'$1<span class="tok-function">$2</span>');
-  return html.replace(/\u0000(\d+)\u0000/g,(_,index)=>`<span class="tok-${tokens[index].type}">${escapeHtml(tokens[index].text)}</span>`)+"\n";
+  return html.replace(/[\uE000-\uF8FF]/g,key=>{const token=tokens[key.charCodeAt(0)-0xE000];return `<span class="tok-${token.type}">${escapeHtml(token.text)}</span>`})+"\n";
 }
 
 function renderEditor(){
@@ -66,6 +66,20 @@ function renderEditor(){
   syncEditorScroll();
 }
 function syncEditorScroll(){const editor=$("competitionCode");$("competitionHighlight").scrollTop=editor.scrollTop;$("competitionHighlight").scrollLeft=editor.scrollLeft;$("competitionLines").scrollTop=editor.scrollTop}
+
+function placeCaretInStarter(){
+  const editor=$("competitionCode");
+  const commentStart=editor.value.indexOf("//");
+  if(commentStart>=0){
+    const commentEnd=editor.value.indexOf("\n",commentStart);
+    editor.setSelectionRange(commentStart,commentEnd<0?editor.value.length:commentEnd);
+  }else{
+    const bodyStart=editor.value.indexOf("\n")+1;
+    const indentation=(editor.value.slice(bodyStart).match(/^\s*/)||[""])[0].length;
+    editor.setSelectionRange(bodyStart+indentation,bodyStart+indentation);
+  }
+  editor.focus();
+}
 
 function setConsole(status,message,type=""){
   $("consoleStatus").textContent=status;
@@ -92,7 +106,7 @@ function renderChallenge(){
   $("resetChallenge").disabled=false;
   setConsole("LISTO","> Sistema preparado\n\nEscribe tu solución y pulsa “Ejecutar y comprobar”.");
   renderEditor();
-  requestAnimationFrame(()=>$("competitionCode").focus());
+  requestAnimationFrame(placeCaretInStarter);
 }
 
 function updateTimer(){
@@ -154,17 +168,42 @@ $("resetChallenge").addEventListener("click",()=>{
   $("competitionCode").value=activeChallenges[challengeIndex].starter;
   renderEditor();
   setConsole("REINICIADO","> Código restaurado\n\nPuedes comenzar nuevamente este reto.");
-  $("competitionCode").focus();
+  placeCaretInStarter();
 });
 $("competitionCode").addEventListener("input",renderEditor);
 $("competitionCode").addEventListener("scroll",syncEditorScroll);
 $("competitionCode").addEventListener("keydown",event=>{
+  const editor=event.currentTarget;
   if(event.key==="Tab"){
-    event.preventDefault();const editor=event.currentTarget;editor.setRangeText("    ",editor.selectionStart,editor.selectionEnd,"end");renderEditor();return;
+    event.preventDefault();
+    const start=editor.selectionStart;const end=editor.selectionEnd;
+    if(start!==end&&editor.value.slice(start,end).includes("\n")){
+      const lineStart=editor.value.lastIndexOf("\n",start-1)+1;
+      const block=editor.value.slice(lineStart,end);
+      const changed=event.shiftKey?block.replace(/^ {1,4}/gm,""):block.replace(/^/gm,"    ");
+      editor.setRangeText(changed,lineStart,end,"select");
+    }else if(event.shiftKey){
+      const lineStart=editor.value.lastIndexOf("\n",start-1)+1;
+      const spaces=editor.value.slice(lineStart,start).match(/ {1,4}$/)?.[0].length||0;
+      if(spaces)editor.setRangeText("",start-spaces,start,"end");
+    }else editor.setRangeText("    ",start,end,"end");
+    renderEditor();return;
   }
   if(event.key==="Enter"){
-    event.preventDefault();const editor=event.currentTarget;const before=editor.value.slice(0,editor.selectionStart);const currentLine=before.slice(before.lastIndexOf("\n")+1);const indentation=(currentLine.match(/^\s*/)||[""])[0]+(currentLine.trimEnd().endsWith("{")?"    ":"");editor.setRangeText(`\n${indentation}`,editor.selectionStart,editor.selectionEnd,"end");renderEditor();
+    event.preventDefault();const start=editor.selectionStart;const before=editor.value.slice(0,start);const after=editor.value.slice(editor.selectionEnd);const currentLine=before.slice(before.lastIndexOf("\n")+1);const baseIndent=(currentLine.match(/^\s*/)||[""])[0];
+    if(currentLine.trimEnd().endsWith("{")&&after.trimStart().startsWith("}")){
+      const insertion=`\n${baseIndent}    \n${baseIndent}`;editor.setRangeText(insertion,start,editor.selectionEnd,"end");editor.setSelectionRange(start+baseIndent.length+5,start+baseIndent.length+5);
+    }else{
+      const indentation=baseIndent+(currentLine.trimEnd().endsWith("{")?"    ":"");editor.setRangeText(`\n${indentation}`,start,editor.selectionEnd,"end");
+    }
+    renderEditor();return;
   }
+  const pairs={"{":"}","(":")","[":"]",'"':'"',"'":"'"};
+  if(["}",")","]",'"',"'"].includes(event.key)&&editor.value[editor.selectionStart]===event.key){event.preventDefault();editor.setSelectionRange(editor.selectionStart+1,editor.selectionStart+1);return}
+  if(pairs[event.key]){
+    event.preventDefault();const start=editor.selectionStart;const end=editor.selectionEnd;const selected=editor.value.slice(start,end);editor.setRangeText(`${event.key}${selected}${pairs[event.key]}`,start,end,"end");editor.setSelectionRange(start+1,start+1+selected.length);renderEditor();return;
+  }
+  if(event.key==="Backspace"&&editor.selectionStart===editor.selectionEnd){const start=editor.selectionStart;const closing=pairs[editor.value[start-1]];if(closing&&editor.value[start]===closing){event.preventDefault();editor.setRangeText("",start-1,start+1,"end");renderEditor()}}
 });
 
 selectLevel("easy");
