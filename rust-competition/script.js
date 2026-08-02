@@ -39,8 +39,10 @@ let activeChallenges = [];
 let challengeIndex = 0;
 let score = 0;
 let secondsLeft = levels.easy.seconds;
+let bonusSeconds = 0;
 let timerId = null;
 let running = false;
+let confettiFrameId = null;
 
 function pad(value){return String(value).padStart(2,"0")}
 function formatTime(seconds){return `${pad(Math.floor(seconds/60))}:${pad(seconds%60)}`}
@@ -114,12 +116,59 @@ function updateTimer(){
   $("competitionTimer").parentElement.classList.toggle("danger",secondsLeft<=15);
 }
 
+function addTimeBonus(){
+  bonusSeconds+=20;
+  secondsLeft+=20;
+  updateTimer();
+  const timerCard=$("competitionTimer").parentElement;
+  timerCard.classList.remove("time-bonus");
+  requestAnimationFrame(()=>timerCard.classList.add("time-bonus"));
+  setTimeout(()=>timerCard.classList.remove("time-bonus"),850);
+}
+
+function stopMatrixConfetti(){
+  if(confettiFrameId)cancelAnimationFrame(confettiFrameId);
+  confettiFrameId=null;
+  const canvas=$("matrixConfetti");
+  canvas.classList.add("hidden");
+  const context=canvas.getContext("2d");
+  context?.clearRect(0,0,canvas.width,canvas.height);
+}
+
+function startMatrixConfetti(){
+  stopMatrixConfetti();
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const canvas=$("matrixConfetti");
+  const context=canvas.getContext("2d");
+  const ratio=Math.min(window.devicePixelRatio||1,2);
+  const width=window.innerWidth;const height=window.innerHeight;
+  canvas.width=Math.floor(width*ratio);canvas.height=Math.floor(height*ratio);
+  canvas.classList.remove("hidden");
+  context.setTransform(ratio,0,0,ratio,0,0);
+  const symbols=["0","1","R","U","S","T","{","}","<",">",";","fn","let"];
+  const colors=["#a3be8c","#8fbcbb","#88c0d0","#ebcb8b","#d08770"];
+  const amount=Math.min(220,Math.max(90,Math.floor(width/7)));
+  const particles=Array.from({length:amount},()=>({x:Math.random()*width,y:-Math.random()*height,speed:2.3+Math.random()*5.4,size:11+Math.random()*14,swing:(Math.random()-.5)*1.5,rotation:Math.random()*Math.PI,symbol:symbols[Math.floor(Math.random()*symbols.length)],color:colors[Math.floor(Math.random()*colors.length)],alpha:.55+Math.random()*.45}));
+  const started=performance.now();
+  function draw(now){
+    context.clearRect(0,0,width,height);
+    particles.forEach(particle=>{
+      particle.y+=particle.speed;particle.x+=Math.sin(particle.y*.018)*particle.swing;particle.rotation+=.012;
+      if(particle.y>height+30){particle.y=-30-Math.random()*180;particle.x=Math.random()*width}
+      context.save();context.translate(particle.x,particle.y);context.rotate(particle.rotation);context.globalAlpha=particle.alpha;context.fillStyle=particle.color;context.shadowColor=particle.color;context.shadowBlur=8;context.font=`800 ${particle.size}px ui-monospace, monospace`;context.fillText(particle.symbol,0,0);context.restore();
+    });
+    if(now-started<6000)confettiFrameId=requestAnimationFrame(draw);else stopMatrixConfetti();
+  }
+  confettiFrameId=requestAnimationFrame(draw);
+}
+
 function startCompetition(){
   const level=levels[selectedLevel];
   document.body.classList.add("competition-active");
   clearInterval(timerId);
   activeChallenges=shuffle(level.challenges);
-  challengeIndex=0;score=0;secondsLeft=level.seconds;running=true;
+  challengeIndex=0;score=0;bonusSeconds=0;secondsLeft=level.seconds;running=true;
+  stopMatrixConfetti();
   $("competitionSetup").classList.add("hidden");
   $("competitionResults").classList.add("hidden");
   $("competitionArena").classList.remove("hidden");
@@ -137,12 +186,13 @@ function finishCompetition(reason){
   const challenge=activeChallenges[Math.min(challengeIndex,activeChallenges.length-1)];
   $("competitionArena").classList.add("hidden");
   $("competitionResults").classList.remove("hidden");
-  $("resultKicker").textContent=reason==="complete"?"COMPETENCIA COMPLETADA":"TIEMPO AGOTADO";
-  $("resultTitle").textContent=`${score} de ${activeChallenges.length} resueltos`;
+  $("competitionResults").classList.toggle("perfect-result",reason==="complete");
+  $("resultKicker").textContent=reason==="complete"?"FELICITACIONES":"TIEMPO AGOTADO";
+  $("resultTitle").textContent=reason==="complete"?`¡${score} de ${activeChallenges.length} retos completados!`:`${score} de ${activeChallenges.length} resueltos`;
   $("resultSubtitle").textContent=reason==="complete"?"¡Terminaste todos los retos antes de que se agotara el tiempo!":`Llegaste al problema ${Math.min(challengeIndex+1,activeChallenges.length)} de ${activeChallenges.length}.`;
   $("resultPoints").textContent=score*100;
-  $("resultTime").textContent=formatTime(level.seconds).replace(/^0/,"");
-  $("resultTimeNote").textContent=`Nivel ${level.label}`;
+  $("resultTime").textContent=formatTime(level.seconds+bonusSeconds).replace(/^0/,"");
+  $("resultTimeNote").textContent=bonusSeconds?`+${bonusSeconds} s ganados`:`Nivel ${level.label}`;
   $("resultProgress").textContent=`${score}/${activeChallenges.length}`;
   $("resultLevel").textContent=level.label;
   $("improvementTopic").textContent=reason==="complete"?"Velocidad y claridad":challenge.topic;
@@ -151,18 +201,19 @@ function finishCompetition(reason){
   $("easySolutionPanel").classList.toggle("hidden",!showEasySolution);
   $("noSolutionPanel").classList.toggle("hidden",showEasySolution||reason==="complete");
   if(showEasySolution){$("solutionTitle").textContent=challenge.title;$("resultSolution").textContent=challenge.solution;$("resultOutput").textContent=challenge.output}
+  if(reason==="complete")startMatrixConfetti();else stopMatrixConfetti();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
 document.querySelectorAll("[data-level]").forEach(button=>button.addEventListener("click",()=>selectLevel(button.dataset.level)));
 $("startCompetition").addEventListener("click",startCompetition);
-$("newCompetition").addEventListener("click",()=>{document.body.classList.remove("competition-active");$("competitionResults").classList.add("hidden");$("competitionSetup").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"})});
+$("newCompetition").addEventListener("click",()=>{stopMatrixConfetti();document.body.classList.remove("competition-active");$("competitionResults").classList.add("hidden");$("competitionSetup").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"})});
 $("leaveCompetition").addEventListener("click",()=>{if(!running)return;document.body.classList.remove("competition-active");running=false;clearInterval(timerId);timerId=null;$("competitionArena").classList.add("hidden");$("competitionSetup").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"})});
 $("checkSolution").addEventListener("click",()=>{
   if(!running||challengeIndex>=activeChallenges.length)return;
   const challenge=activeChallenges[challengeIndex];
   if(!challenge.valid($("competitionCode").value)){setConsole("ERROR","[ERROR DE VALIDACIÓN]\n\nNo se encontró todo lo solicitado en el objetivo.\n\nRevisa los nombres, operadores, llaves y puntos y coma.","error");return}
-  score++;challengeIndex++;$("checkSolution").disabled=true;$("resetChallenge").disabled=true;$("competitionScore").textContent=score*100;setConsole("CORRECTO",`[EJECUCIÓN COMPLETADA]\n\n${challenge.output}\n\n✓ Reto superado · +100 puntos`,"ok");
+  score++;challengeIndex++;addTimeBonus();$("checkSolution").disabled=true;$("resetChallenge").disabled=true;$("competitionScore").textContent=score*100;setConsole("CORRECTO",`[EJECUCIÓN COMPLETADA]\n\n${challenge.output}\n\n✓ Reto superado\n+100 puntos · +20 segundos`,"ok");
   if(challengeIndex>=activeChallenges.length){clearInterval(timerId);timerId=null;setTimeout(()=>finishCompetition("complete"),1100)}else{setTimeout(()=>{if(running)renderChallenge()},1100)}
 });
 $("resetChallenge").addEventListener("click",()=>{
