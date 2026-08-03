@@ -101,6 +101,13 @@ function setConsole(status,message,type=""){
   $("competitionFeedback").className=`feedback${type?` ${type}`:""}`;
 }
 
+function setConsoleOutput(label,output,success=false){
+  $("consoleOutputLabel").textContent=label;
+  $("challengeExpectedOutput").textContent=output.replace(/\n/g," · ");
+  $("challengeExpectedOutput").title=output;
+  $("consoleOutputBox").classList.toggle("success",success);
+}
+
 function renderObjective(text){
   const target=$("challengeObjective");
   const keyTarget=$("challengeKeyTokens");
@@ -140,8 +147,7 @@ function renderChallenge(){
   $("challengeTopic").textContent=levels[selectedLevel].topic;
   $("challengeTitle").textContent=challenge.title;
   renderObjective(challenge.objective);
-  $("challengeExpectedOutput").textContent=challenge.output.replace(/\n/g," · ");
-  $("challengeExpectedOutput").title=challenge.output;
+  setConsoleOutput("SALIDA ESPERADA",challenge.output);
   $("competitionCode").value=challenge.starter;
   $("checkSolution").disabled=false;
   $("resetChallenge").disabled=false;
@@ -252,7 +258,7 @@ $("checkSolution").addEventListener("click",()=>{
   if(!running||challengeIndex>=activeChallenges.length)return;
   const challenge=activeChallenges[challengeIndex];
   if(!challenge.valid($("competitionCode").value)){setConsole("ERROR",`[ERROR DE VALIDACIÓN]\n\nFalta algún requisito del objetivo:\n${challenge.objective}\n\nSalida esperada: ${challenge.output.replace(/\n/g," · ")}`,"error");return}
-  score++;challengeIndex++;addTimeBonus();$("checkSolution").disabled=true;$("resetChallenge").disabled=true;$("competitionScore").textContent=score*100;setConsole("CORRECTO",`[EJECUCIÓN COMPLETADA]\n\n${challenge.output}\n\n✓ Reto superado\n+100 puntos · +20 segundos`,"ok");
+  score++;challengeIndex++;addTimeBonus();$("checkSolution").disabled=true;$("resetChallenge").disabled=true;$("competitionScore").textContent=score*100;setConsole("CORRECTO","[EJECUCION COMPLETADA]\n\n✓ Reto superado · +100 puntos · +20 segundos","ok");setConsoleOutput("SALIDA OBTENIDA",challenge.output,true);
   if(challengeIndex>=activeChallenges.length){clearInterval(timerId);timerId=null;setTimeout(()=>finishCompetition("complete"),1100)}else{setTimeout(()=>{if(running)renderChallenge()},1100)}
 });
 $("resetChallenge").addEventListener("click",()=>{
@@ -260,6 +266,7 @@ $("resetChallenge").addEventListener("click",()=>{
   $("competitionCode").value=activeChallenges[challengeIndex].starter;
   renderEditor();
   setConsole("REINICIADO","> Código restaurado\n\nPuedes comenzar nuevamente este reto.");
+  setConsoleOutput("SALIDA ESPERADA",activeChallenges[challengeIndex].output);
   placeCaretInStarter();
 });
 $("competitionCode").addEventListener("input",renderEditor);
