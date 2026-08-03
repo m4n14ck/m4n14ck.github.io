@@ -53,20 +53,18 @@
 
         <section id="competitionArena" class="competition-shell arena-screen hidden" aria-live="polite">
             <div class="arena-heading">
-                <div><span class="kicker">⚙ COMPETENCIA EN CURSO</span><h1>Escribe tu solución</h1></div>
+                <span class="kicker">⚙ COMPETENCIA EN CURSO</span>
+                <div class="status-grid">
+                    <div class="stat timer-stat"><span>TIEMPO</span><b id="competitionTimer">01:30</b></div>
+                    <div class="stat"><span>NIVEL</span><b id="competitionDifficulty">FÁCIL</b></div>
+                    <div class="stat"><span>RETO</span><b id="competitionProgress">1 / 5</b></div>
+                    <div class="stat"><span>PUNTOS</span><b id="competitionScore">0</b></div>
+                </div>
                 <button id="leaveCompetition" class="ghost-button" type="button">SALIR</button>
             </div>
 
-            <div class="status-grid">
-                <div class="stat timer-stat"><span>TIEMPO RESTANTE</span><b id="competitionTimer">01:30</b></div>
-                <div class="stat"><span>DIFICULTAD</span><b id="competitionDifficulty">FÁCIL</b></div>
-                <div class="stat"><span>RETO</span><b id="competitionProgress">1 / 5</b></div>
-                <div class="stat"><span>PUNTOS</span><b id="competitionScore">0</b></div>
-            </div>
-
             <article class="challenge-brief">
-                <span id="challengeTopic" class="challenge-topic">FUNDAMENTOS</span>
-                <h2 id="challengeTitle"></h2>
+                <div class="challenge-title-row"><span id="challengeTopic" class="challenge-topic">FUNDAMENTOS</span><h2 id="challengeTitle"></h2></div>
                 <p id="challengeObjective"></p>
                 <div class="requirement"><span>▸</span><p><b>SALIDA ESPERADA:</b> <code id="challengeExpectedOutput"></code></p></div>
             </article>

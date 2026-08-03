@@ -89,6 +89,26 @@ function setConsole(status,message,type=""){
   $("competitionFeedback").className=`feedback${type?` ${type}`:""}`;
 }
 
+function renderObjective(text){
+  const target=$("challengeObjective");
+  const pattern=/"(?:\\.|[^"\\])*"|String::from|println!|vec!|push_str|\b(?:let|mut|fn|if|for|in|match|struct|impl|Result|Ok|Err|String|i32|u32|usize|energia|nivel|numero|puntos|sumar|numeros|mensaje|codigo|Usuario|usuario|origen|destino|longitud|texto|resultado|valor|error|Rectangulo|rectangulo|mostrar_estado|estado|area|ancho|alto|self|main|push|len)\b|&String|&str|\.\.=|>=|\+=|->|::|\d+/g;
+  const keywords=new Set(["let","mut","fn","if","for","in","match","struct","impl","self"]);
+  const types=new Set(["String","Result","Ok","Err","i32","u32","usize","&String","&str","Usuario","Rectangulo"]);
+  const macros=new Set(["println!","vec!"]);
+  const fragment=document.createDocumentFragment();
+  let position=0;
+  for(const match of text.matchAll(pattern)){
+    if(match.index>position)fragment.append(document.createTextNode(text.slice(position,match.index)));
+    const token=document.createElement("span");
+    const value=match[0];
+    token.textContent=value;
+    token.className=value.startsWith('"')?"objective-string":macros.has(value)?"objective-macro":keywords.has(value)?"objective-keyword":types.has(value)?"objective-type":/^\d+$/.test(value)?"objective-number":/^(?:\.\.=|>=|\+=|->|::)$/.test(value)?"objective-operator":"objective-name";
+    fragment.append(token);position=match.index+value.length;
+  }
+  if(position<text.length)fragment.append(document.createTextNode(text.slice(position)));
+  target.replaceChildren(fragment);
+}
+
 function selectLevel(name){
   if(running||!levels[name])return;
   selectedLevel=name;
@@ -102,7 +122,7 @@ function renderChallenge(){
   $("competitionScore").textContent=score*100;
   $("challengeTopic").textContent=levels[selectedLevel].topic;
   $("challengeTitle").textContent=challenge.title;
-  $("challengeObjective").textContent=challenge.objective;
+  renderObjective(challenge.objective);
   $("challengeExpectedOutput").textContent=challenge.output.replace(/\n/g," · ");
   $("challengeExpectedOutput").title=challenge.output;
   $("competitionCode").value=challenge.starter;
