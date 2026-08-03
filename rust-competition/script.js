@@ -4,7 +4,7 @@ const levels = {
   easy: {
     label: "Fácil", seconds: 90, topic: "FUNDAMENTOS",
     challenges: [
-      {title:"Variable de energía",objective:'Declara una variable inmutable llamada energia con valor 100. Después imprime exactamente "Energía: 100" usando println!("Energía: {}", energia).',starter:"fn main() {\n    // Declara energia e imprime el mensaje\n\n}",solution:"fn main() {\n    let energia = 100;\n    println!(\"Energía: {}\", energia);\n}",output:"Energía: 100",topic:"Variables",advice:"Repasa el módulo de variables. Usa let energia = 100; y pasa energia al marcador {} de println!.",valid:code=>/\blet\s+energia(?:\s*:\s*i32)?\s*=\s*100\s*;/.test(code)&&/println!\s*\(\s*"Energía: \{\}"\s*,\s*energia\s*\)\s*;/.test(code)},
+      {title:"Variable de energía",objective:'Declara una variable inmutable llamada energia con valor 100. Después imprime exactamente "Energía: 100" usando println!("Energía: {}", energia).',starter:"fn main() {\n    // Declara energia e imprime el mensaje\n\n}",solution:"fn main() {\n    let energia = 100;\n    println!(\"Energía: {}\", energia);\n}",output:"Energía: 100",topic:"Variables",advice:"Repasa el módulo de variables. Usa let energia = 100; y pasa energia al marcador {} de println!.",valid:code=>/\blet\s+energia(?:\s*:\s*i32)?\s*=\s*100\s*;/.test(code)&&/println!\s*\(\s*"Energia: \{\}"\s*,\s*energia\s*\)\s*;/.test(code)},
       {title:"Mensaje de inicio",objective:'Usa println! para mostrar exactamente "Rust listo".',starter:'fn main() {\n    println!("");\n}',solution:'fn main() {\n    println!("Rust listo");\n}',output:"Rust listo",topic:"Impresión en pantalla",advice:"println! es una macro. Escribe el texto entre comillas, dentro de los paréntesis, y termina la línea con punto y coma.",valid:code=>/println!\s*\(\s*"Rust listo"\s*\)\s*;/.test(code)},
       {title:"Acceso por nivel",objective:'Crea un if que compruebe si nivel es mayor o igual que 5. Dentro de sus llaves imprime exactamente "Acceso concedido" usando println!("Acceso concedido").',starter:"fn main() {\n    let nivel = 7;\n    // Crea la condición e imprime el mensaje\n\n}",solution:'fn main() {\n    let nivel = 7;\n    if nivel >= 5 {\n        println!("Acceso concedido");\n    }\n}',output:"Acceso concedido",topic:"Condiciones",advice:"Escribe if nivel >= 5 y coloca println! dentro de las llaves de la condición.",valid:code=>/\bif\s+nivel\s*>=\s*5\s*\{[\s\S]*?println!\s*\(\s*"Acceso concedido"\s*\)\s*;/.test(code)},
       {title:"Rango completo",objective:'Usa for numero in 1..=5 y, dentro del ciclo, imprime cada número con println!("{}", numero). Deben mostrarse del 1 al 5.',starter:"fn main() {\n    // Crea el ciclo e imprime cada número\n\n}",solution:'fn main() {\n    for numero in 1..=5 {\n        println!("{}", numero);\n    }\n}',output:"1\n2\n3\n4\n5",topic:"Ciclos y rangos",advice:"El rango inclusivo 1..=5 contiene ambos extremos. Dentro de las llaves del for, imprime numero con el marcador {}.",valid:code=>/\bfor\s+numero\s+in\s+1\s*\.\.=\s*5\s*\{[\s\S]*?println!\s*\(\s*"\{\}"\s*,\s*numero\s*\)\s*;/.test(code)},
@@ -32,6 +32,18 @@ const levels = {
     ]
   }
 };
+
+function removeChallengeAccents(value){
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+}
+
+Object.values(levels).forEach(level=>{
+  level.challenges.forEach(challenge=>{
+    ["title","objective","starter","solution","output","topic","advice"].forEach(property=>{
+      challenge[property]=removeChallengeAccents(challenge[property]);
+    });
+  });
+});
 
 const $ = id => document.getElementById(id);
 let selectedLevel = "easy";
@@ -91,11 +103,14 @@ function setConsole(status,message,type=""){
 
 function renderObjective(text){
   const target=$("challengeObjective");
+  const keyTarget=$("challengeKeyTokens");
   const pattern=/"(?:\\.|[^"\\])*"|String::from|println!|vec!|push_str|\b(?:let|mut|fn|if|for|in|match|struct|impl|Result|Ok|Err|String|i32|u32|usize|energia|nivel|numero|puntos|sumar|numeros|mensaje|codigo|Usuario|usuario|origen|destino|longitud|texto|resultado|valor|error|Rectangulo|rectangulo|mostrar_estado|estado|area|ancho|alto|self|main|push|len)\b|&String|&str|\.\.=|>=|\+=|->|::|\d+/g;
   const keywords=new Set(["let","mut","fn","if","for","in","match","struct","impl","self"]);
   const types=new Set(["String","Result","Ok","Err","i32","u32","usize","&String","&str","Usuario","Rectangulo"]);
   const macros=new Set(["println!","vec!"]);
   const fragment=document.createDocumentFragment();
+  const keyFragment=document.createDocumentFragment();
+  const usedKeys=new Set();
   let position=0;
   for(const match of text.matchAll(pattern)){
     if(match.index>position)fragment.append(document.createTextNode(text.slice(position,match.index)));
@@ -103,10 +118,12 @@ function renderObjective(text){
     const value=match[0];
     token.textContent=value;
     token.className=value.startsWith('"')?"objective-string":macros.has(value)?"objective-macro":keywords.has(value)?"objective-keyword":types.has(value)?"objective-type":/^\d+$/.test(value)?"objective-number":/^(?:\.\.=|>=|\+=|->|::)$/.test(value)?"objective-operator":"objective-name";
+    if(!usedKeys.has(value)&&usedKeys.size<10){const key=token.cloneNode(true);key.classList.add("key-token");keyFragment.append(key);usedKeys.add(value)}
     fragment.append(token);position=match.index+value.length;
   }
   if(position<text.length)fragment.append(document.createTextNode(text.slice(position)));
   target.replaceChildren(fragment);
+  keyTarget.replaceChildren(keyFragment);
 }
 
 function selectLevel(name){
