@@ -45,6 +45,87 @@ Object.values(levels).forEach(level=>{
   });
 });
 
+const challengeRequirements={
+  "Variable de energia":[
+    {message:'Declara la variable exactamente con `let energia = 100;`.',test:code=>/\blet\s+energia(?:\s*:\s*i32)?\s*=\s*100\s*;/.test(code)},
+    {message:'Imprime el resultado con `println!("Energia: {}", energia);`.',test:code=>/println!\s*\(\s*"Energia: \{\}"\s*,\s*energia\s*\)\s*;/.test(code)}
+  ],
+  "Mensaje de inicio":[
+    {message:'Escribe `println!("Rust listo");` dentro de `main`.',test:code=>/println!\s*\(\s*"Rust listo"\s*\)\s*;/.test(code)}
+  ],
+  "Acceso por nivel":[
+    {message:'Crea la condicion `if nivel >= 5 { ... }`.',test:code=>/\bif\s+nivel\s*>=\s*5\s*\{/.test(code)},
+    {message:'Dentro del `if`, agrega `println!("Acceso concedido");`.',test:code=>/\bif\s+nivel\s*>=\s*5\s*\{[\s\S]*?println!\s*\(\s*"Acceso concedido"\s*\)\s*;/.test(code)}
+  ],
+  "Rango completo":[
+    {message:'Crea el ciclo inclusivo `for numero in 1..=5 { ... }`.',test:code=>/\bfor\s+numero\s+in\s+1\s*\.\.=\s*5\s*\{/.test(code)},
+    {message:'Dentro del ciclo, imprime `numero` con `println!("{}", numero);`.',test:code=>/\bfor\s+numero\s+in\s+1\s*\.\.=\s*5\s*\{[\s\S]*?println!\s*\(\s*"\{\}"\s*,\s*numero\s*\)\s*;/.test(code)}
+  ],
+  "Puntos mutables":[
+    {message:'Declara `puntos` como mutable con `let mut puntos = 10;`.',test:code=>/\blet\s+mut\s+puntos\s*=\s*10\s*;/.test(code)},
+    {message:'Suma 5 con `puntos += 5;`.',test:code=>/\bpuntos\s*\+=\s*5\s*;/.test(code)},
+    {message:'Muestra el resultado con `println!("{}", puntos);`.',test:code=>/println!\s*\(\s*"\{\}"\s*,\s*puntos\s*\)\s*;/.test(code)}
+  ],
+  "Funcion sumar":[
+    {message:'Declara `fn sumar(a: i32, b: i32) -> i32`.',test:code=>/fn\s+sumar\s*\(\s*a\s*:\s*i32\s*,\s*b\s*:\s*i32\s*\)\s*->\s*i32/.test(code)},
+    {message:'Devuelve `a + b` como ultima expresion de `sumar`.',test:code=>/fn\s+sumar[\s\S]*?\{[\s\S]*?\ba\s*\+\s*b/.test(code)},
+    {message:'En `main`, imprime `sumar(4, 6)` con `println!("{}", sumar(4, 6));`.',test:code=>/println!\s*\(\s*"\{\}"\s*,\s*sumar\s*\(\s*4\s*,\s*6\s*\)\s*\)\s*;/.test(code)}
+  ],
+  "Vector dinamico":[
+    {message:'Crea `let mut numeros = vec![1, 2, 3];`.',test:code=>/let\s+mut\s+numeros\s*=\s*vec!\s*\[\s*1\s*,\s*2\s*,\s*3\s*\]\s*;/.test(code)},
+    {message:'Agrega el numero 4 con `numeros.push(4);`.',test:code=>/numeros\s*\.\s*push\s*\(\s*4\s*\)\s*;/.test(code)},
+    {message:'Imprime el vector con `println!("{:?}", numeros);`.',test:code=>/println!\s*\(\s*"\{:\?\}"\s*,\s*numeros\s*\)\s*;/.test(code)}
+  ],
+  "String ampliable":[
+    {message:'Crea `let mut mensaje = String::from("Hola");`.',test:code=>/let\s+mut\s+mensaje\s*=\s*String\s*::\s*from\s*\(\s*"Hola"\s*\)\s*;/.test(code)},
+    {message:'Agrega el texto con `mensaje.push_str(" Rust");`.',test:code=>/mensaje\s*\.\s*push_str\s*\(\s*" Rust"\s*\)\s*;/.test(code)},
+    {message:'Imprime `mensaje` con `println!("{}", mensaje);`.',test:code=>/println!\s*\(\s*"\{\}"\s*,\s*mensaje\s*\)\s*;/.test(code)}
+  ],
+  "Codigo HTTP":[
+    {message:'Crea un bloque `match codigo { ... }`.',test:code=>/match\s+codigo\s*\{/.test(code)},
+    {message:'Agrega el caso `200 => println!("OK")`.',test:code=>/200\s*=>\s*println!\s*\(\s*"OK"\s*\)/.test(code)},
+    {message:'Agrega el caso general `_ => println!("Error")`.',test:code=>/_\s*=>\s*println!\s*\(\s*"Error"\s*\)/.test(code)}
+  ],
+  "Modelo Usuario":[
+    {message:'Declara `struct Usuario` con el campo `nombre: String`.',test:code=>/struct\s+Usuario\s*\{[\s\S]*?nombre\s*:\s*String/.test(code)},
+    {message:'Agrega el campo `nivel: u32` dentro de `Usuario`.',test:code=>/struct\s+Usuario\s*\{[\s\S]*?nivel\s*:\s*u32/.test(code)},
+    {message:'Crea `usuario` con nombre `Ana` y nivel `3`.',test:code=>/let\s+usuario\s*=\s*Usuario\s*\{[\s\S]*?String\s*::\s*from\s*\(\s*"Ana"\s*\)[\s\S]*?nivel\s*:\s*3/.test(code)},
+    {message:'Imprime ambos campos con `println!("{} - {}", usuario.nombre, usuario.nivel);`.',test:code=>/println!\s*\(\s*"\{\} - \{\}"\s*,\s*usuario\.nombre\s*,\s*usuario\.nivel\s*\)\s*;/.test(code)}
+  ],
+  "Transferir propiedad":[
+    {message:'Crea `origen` con `String::from("Rust")`.',test:code=>/let\s+origen\s*=\s*String\s*::\s*from\s*\(\s*"Rust"\s*\)\s*;/.test(code)},
+    {message:'Mueve el valor con `let destino = origen;`.',test:code=>/let\s+destino\s*=\s*origen\s*;/.test(code)},
+    {message:'Imprime `destino` con `println!("{}", destino);`.',test:code=>/println!\s*\(\s*"\{\}"\s*,\s*destino\s*\)\s*;/.test(code)}
+  ],
+  "Prestamo inmutable":[
+    {message:'Declara `fn longitud(texto: &String) -> usize`.',test:code=>/fn\s+longitud\s*\(\s*texto\s*:\s*&\s*String\s*\)\s*->\s*usize/.test(code)},
+    {message:'Devuelve la longitud usando `texto.len()`.',test:code=>/fn\s+longitud[\s\S]*?\{[\s\S]*?texto\s*\.\s*len\s*\(\s*\)/.test(code)},
+    {message:'Crea `texto` con `String::from("Rust")`.',test:code=>/let\s+texto\s*=\s*String\s*::\s*from\s*\(\s*"Rust"\s*\)\s*;/.test(code)},
+    {message:'Imprime `longitud(&texto)` con `println!`.',test:code=>/println!\s*\(\s*"\{\}"\s*,\s*longitud\s*\(\s*&\s*texto\s*\)\s*\)\s*;/.test(code)}
+  ],
+  "Resultado controlado":[
+    {message:'Crea un bloque `match resultado { ... }`.',test:code=>/match\s+resultado\s*\{/.test(code)},
+    {message:'En `Ok(valor)`, imprime `valor` con `println!`.',test:code=>/Ok\s*\(\s*valor\s*\)\s*=>\s*println!\s*\(\s*"\{\}"\s*,\s*valor\s*\)/.test(code)},
+    {message:'En `Err(error)`, imprime `error` con `println!`.',test:code=>/Err\s*\(\s*error\s*\)\s*=>\s*println!\s*\(\s*"\{\}"\s*,\s*error\s*\)/.test(code)}
+  ],
+  "Metodo de area":[
+    {message:'Crea `impl Rectangulo` y el metodo `fn area(&self) -> u32`.',test:code=>/impl\s+Rectangulo\s*\{[\s\S]*?fn\s+area\s*\(\s*&\s*self\s*\)\s*->\s*u32/.test(code)},
+    {message:'Haz que `area` devuelva `self.ancho * self.alto`.',test:code=>/fn\s+area[\s\S]*?self\s*\.\s*ancho\s*\*\s*self\s*\.\s*alto/.test(code)},
+    {message:'Crea `rectangulo` con ancho 4 y alto 5.',test:code=>/let\s+rectangulo\s*=\s*Rectangulo\s*\{[\s\S]*?ancho\s*:\s*4[\s\S]*?alto\s*:\s*5/.test(code)},
+    {message:'Imprime `rectangulo.area()` con `println!`.',test:code=>/println!\s*\(\s*"\{\}"\s*,\s*rectangulo\.area\s*\(\s*\)\s*\)\s*;/.test(code)}
+  ],
+  "Eliminar duplicacion":[
+    {message:'Declara `fn mostrar_estado(estado: &str)` e imprime `estado` dentro.',test:code=>/fn\s+mostrar_estado\s*\(\s*estado\s*:\s*&str\s*\)\s*\{[\s\S]*?println!\s*\(\s*"\{\}"\s*,\s*estado\s*\)\s*;/.test(code)},
+    {message:'Llama `mostrar_estado("Activo");`.',test:code=>/mostrar_estado\s*\(\s*"Activo"\s*\)\s*;/.test(code)},
+    {message:'Llama `mostrar_estado("Inactivo");`.',test:code=>/mostrar_estado\s*\(\s*"Inactivo"\s*\)\s*;/.test(code)}
+  ]
+};
+
+function getMissingRequirements(challenge,code){
+  const requirements=challengeRequirements[challenge.title]||[];
+  return requirements.filter(requirement=>!requirement.test(code)).map(requirement=>requirement.message);
+}
+
 const $ = id => document.getElementById(id);
 let selectedLevel = "easy";
 let activeChallenges = [];
@@ -410,8 +491,11 @@ $("checkSolution").addEventListener("click",()=>{
     return;
   }
   if(!challenge.valid(code)){
-    setConsole("SINTAXIS OK",`[REVISION DE COMPILACION SUPERADA]\n\nEl simulador no detecto errores basicos, pero el codigo aun no cumple todos los requisitos del reto.\n\nRevisa el objetivo y la salida solicitada.`,"warning");
-    setConsoleOutput("RETO INCOMPLETO",challenge.output);
+    const detectedMissing=getMissingRequirements(challenge,code);
+    const missing=detectedMissing.length?detectedMissing:["Completa todos los elementos indicados en el objetivo."];
+    const missingList=missing.map((requirement,index)=>`${index+1}. ${requirement}`).join("\n");
+    setConsole("TE FALTA CODIGO",`[REVISION DE COMPILACION SUPERADA]\n\nEl codigo no tiene errores basicos, pero al reto le falta:\n\n${missingList}`,"warning");
+    setConsoleOutput(`FALTAN ${missing.length} ${missing.length===1?"REQUISITO":"REQUISITOS"}`,missing[0]);
     return;
   }
   score++;challengeIndex++;addTimeBonus();$("checkSolution").disabled=true;$("resetChallenge").disabled=true;$("competitionScore").textContent=score*100;setConsole("CORRECTO","[EJECUCION COMPLETADA]\n\n✓ Reto superado · +100 puntos · +20 segundos","ok");setConsoleOutput("SALIDA OBTENIDA",challenge.output,true);
