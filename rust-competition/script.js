@@ -127,6 +127,30 @@ const extraChallenges={
 
 Object.entries(extraChallenges).forEach(([levelName,challenges])=>levels[levelName].challenges.push(...challenges));
 
+// Cada dificultad sigue una ruta de aprendizaje concreta.
+const easyOutsideCurriculum=new Set([
+  "Array de niveles","Primer elemento","Tupla de jugador","Semaforo match",
+  "String propio","Longitud del array","Funcion cuadrado","Funcion es positivo"
+]);
+levels.easy.challenges=levels.easy.challenges.filter(challenge=>!easyOutsideCurriculum.has(challenge.title));
+levels.easy.challenges.push(
+  extraChallenge("Dos mensajes",'Usa dos llamadas a println!: primero muestra exactamente "Rust" y despues "Quest" en otra linea.','fn main() {\n    // Imprime los dos mensajes\n\n}','fn main() {\n    println!("Rust");\n    println!("Quest");\n}',"Rust\nQuest","Primeros pasos",'Cada println! crea una linea de salida y termina con punto y coma.',[["Agrega `println!(\"Rust\");`.",/println!\s*\(\s*"Rust"\s*\)\s*;/],["Despues agrega `println!(\"Quest\");`.",/println!\s*\(\s*"Rust"\s*\)\s*;[\s\S]*?println!\s*\(\s*"Quest"\s*\)\s*;/]]),
+  extraChallenge("Vida mutable",'Declara vida con let mut y valor 100, resta 25 usando vida -= 25 e imprime exactamente 75.','fn main() {\n    // Declara, modifica e imprime vida\n\n}','fn main() {\n    let mut vida = 100;\n    vida -= 25;\n    println!("{}", vida);\n}',"75","Mutabilidad",'Una variable solo puede cambiar si se declara con mut.',[["Declara `let mut vida = 100;`.",/let\s+mut\s+vida\s*=\s*100\s*;/],["Resta con `vida -= 25;`.",/vida\s*-=\s*25\s*;/],["Imprime `vida` con `println!`.",/println!\s*\(\s*"\{\}"\s*,\s*vida\s*\)\s*;/]]),
+  extraChallenge("Clave correcta",'Declara clave = 1234. Usa if clave == 1234 para imprimir exactamente "Correcta".','fn main() {\n    let clave = 1234;\n    // Comprueba la clave\n\n}','fn main() {\n    let clave = 1234;\n    if clave == 1234 {\n        println!("Correcta");\n    }\n}',"Correcta","Condiciones",'El operador == compara dos valores sin modificarlos.',[["Crea `if clave == 1234`.",/if\s+clave\s*==\s*1234\s*\{/],["Dentro del `if`, imprime `Correcta`.",/if\s+clave\s*==\s*1234\s*\{[\s\S]*?println!\s*\(\s*"Correcta"\s*\)\s*;/]]),
+  extraChallenge("Acceso doble",'Con edad = 20 y tiene_pase = true, usa if con edad >= 18 && tiene_pase e imprime exactamente "Entrar".','fn main() {\n    let edad = 20;\n    let tiene_pase = true;\n    // Comprueba ambas condiciones\n\n}','fn main() {\n    let edad = 20;\n    let tiene_pase = true;\n    if edad >= 18 && tiene_pase {\n        println!("Entrar");\n    }\n}',"Entrar","Condiciones",'El operador && exige que las dos condiciones sean verdaderas.',[["Usa `if edad >= 18 && tiene_pase`.",/if\s+edad\s*>=\s*18\s*&&\s*tiene_pase\s*\{/],["Dentro del `if`, imprime `Entrar`.",/if\s+edad[\s\S]*?\{[\s\S]*?println!\s*\(\s*"Entrar"\s*\)\s*;/]]),
+  extraChallenge("Clasificar puntos",'Con puntos = 75, usa if, else if y else: 90 o mas imprime "Oro", 60 o mas imprime "Plata" y el resto "Bronce".','fn main() {\n    let puntos = 75;\n    // Clasifica los puntos\n\n}','fn main() {\n    let puntos = 75;\n    if puntos >= 90 {\n        println!("Oro");\n    } else if puntos >= 60 {\n        println!("Plata");\n    } else {\n        println!("Bronce");\n    }\n}',"Plata","Condiciones",'Las condiciones se prueban de arriba hacia abajo; coloca primero el limite mayor.',[["Crea `if puntos >= 90` e imprime `Oro`.",/if\s+puntos\s*>=\s*90\s*\{[\s\S]*?println!\s*\(\s*"Oro"\s*\)/],["Agrega `else if puntos >= 60` e imprime `Plata`.",/else\s+if\s+puntos\s*>=\s*60\s*\{[\s\S]*?println!\s*\(\s*"Plata"\s*\)/],["Agrega `else` e imprime `Bronce`.",/else\s*\{[\s\S]*?println!\s*\(\s*"Bronce"\s*\)/]]),
+  extraChallenge("Cuenta regresiva",'Usa let mut numero = 3 y un while numero >= 1 para imprimir 3, 2 y 1. Resta uno con numero -= 1.','fn main() {\n    // Crea la cuenta regresiva\n\n}','fn main() {\n    let mut numero = 3;\n    while numero >= 1 {\n        println!("{}", numero);\n        numero -= 1;\n    }\n}',"3\n2\n1","Ciclos",'El while repite el bloque mientras su condicion sea verdadera.',[["Declara `let mut numero = 3;`.",/let\s+mut\s+numero\s*=\s*3\s*;/],["Crea `while numero >= 1`.",/while\s+numero\s*>=\s*1\s*\{/],["Imprime y resta uno a `numero`.",/println!\s*\(\s*"\{\}"\s*,\s*numero\s*\)[\s\S]*?numero\s*-=\s*1\s*;/]]),
+  extraChallenge("Suma del rango",'Crea total mutable con 0. Recorre 1..=4 con for numero y acumula usando total += numero. Al final imprime 10.','fn main() {\n    // Suma los numeros del 1 al 4\n\n}','fn main() {\n    let mut total = 0;\n    for numero in 1..=4 {\n        total += numero;\n    }\n    println!("{}", total);\n}',"10","Ciclos",'El acumulador debe existir antes del for y ser mutable.',[["Declara `let mut total = 0;`.",/let\s+mut\s+total\s*=\s*0\s*;/],["Recorre `for numero in 1..=4`.",/for\s+numero\s+in\s+1\s*\.\.=\s*4\s*\{/],["Dentro del ciclo usa `total += numero;`.",/for\s+numero[\s\S]*?\{[\s\S]*?total\s*\+=\s*numero\s*;/],["Imprime `total` despues del ciclo.",/\}[\s\n]*println!\s*\(\s*"\{\}"\s*,\s*total\s*\)\s*;/]]),
+  extraChallenge("Saltar el tres",'Recorre 1..=5. Si numero == 3 usa continue; en los demas casos imprime numero. La salida debe ser 1, 2, 4 y 5.','fn main() {\n    // Recorre el rango y salta el 3\n\n}','fn main() {\n    for numero in 1..=5 {\n        if numero == 3 {\n            continue;\n        }\n        println!("{}", numero);\n    }\n}',"1\n2\n4\n5","Ciclos",'continue termina la vuelta actual y pasa a la siguiente.',[["Recorre `for numero in 1..=5`.",/for\s+numero\s+in\s+1\s*\.\.=\s*5\s*\{/],["Comprueba `if numero == 3`.",/if\s+numero\s*==\s*3\s*\{/],["Dentro del `if`, usa `continue;`.",/if\s+numero\s*==\s*3\s*\{[\s\S]*?continue\s*;/],["Imprime `numero` en el ciclo.",/println!\s*\(\s*"\{\}"\s*,\s*numero\s*\)\s*;/]])
+);
+
+const mediumOutsideCurriculum=new Set(["Funcion generica identidad","Trait Saludar"]);
+levels.medium.challenges=levels.medium.challenges.filter(challenge=>!mediumOutsideCurriculum.has(challenge.title));
+levels.medium.challenges.push(
+  extraChallenge("Funcion descuento",'Crea fn aplicar_descuento(precio: f64, porcentaje: f64) -> f64 que devuelva precio - precio * porcentaje / 100.0. Imprime aplicar_descuento(200.0, 25.0), que debe mostrar 150.','// Crea aplicar_descuento\n\nfn main() {\n    // Imprime el precio final\n}\n','fn aplicar_descuento(precio: f64, porcentaje: f64) -> f64 {\n    precio - precio * porcentaje / 100.0\n}\nfn main() {\n    println!("{}", aplicar_descuento(200.0, 25.0));\n}',"150","Funciones",'La funcion recibe dos parametros y devuelve la expresion final sin punto y coma.',[["Declara `fn aplicar_descuento(precio: f64, porcentaje: f64) -> f64`.",/fn\s+aplicar_descuento\s*\(\s*precio\s*:\s*f64\s*,\s*porcentaje\s*:\s*f64\s*\)\s*->\s*f64/],["Devuelve la formula indicada.",/precio\s*-\s*precio\s*\*\s*porcentaje\s*\/\s*100\.0/],["Imprime `aplicar_descuento(200.0, 25.0)`.",/println!\s*\(\s*"\{\}"\s*,\s*aplicar_descuento\s*\(\s*200\.0\s*,\s*25\.0\s*\)\s*\)\s*;/]]),
+  extraChallenge("Enum con datos",'Declara enum Evento con Mensaje(String) y Salir. Crea Evento::Mensaje(String::from("Listo")) y usa match para imprimir el texto; Salir debe imprimir "Fin".','// Declara Evento\n\nfn main() {\n    // Crea el evento y usa match\n}\n','enum Evento {\n    Mensaje(String),\n    Salir,\n}\nfn main() {\n    let evento = Evento::Mensaje(String::from("Listo"));\n    match evento {\n        Evento::Mensaje(texto) => println!("{}", texto),\n        Evento::Salir => println!("Fin"),\n    }\n}',"Listo","Enums y match",'Una variante puede guardar datos que se extraen mediante un patron de match.',[["Declara `Evento::Mensaje(String)` y `Evento::Salir`.",/enum\s+Evento\s*\{[\s\S]*?Mensaje\s*\(\s*String\s*\)[\s\S]*?Salir/],["Crea un `Evento::Mensaje` con `Listo`.",/let\s+evento\s*=\s*Evento\s*::\s*Mensaje\s*\(\s*String\s*::\s*from\s*\(\s*"Listo"\s*\)\s*\)\s*;/],["Extrae `texto` e imprimelo en `match`.",/Evento\s*::\s*Mensaje\s*\(\s*texto\s*\)\s*=>\s*println!\s*\(\s*"\{\}"\s*,\s*texto\s*\)/],["Maneja `Evento::Salir` imprimiendo `Fin`.",/Evento\s*::\s*Salir\s*=>\s*println!\s*\(\s*"Fin"\s*\)/]])
+);
+
 function removeChallengeAccents(value){
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 }
@@ -372,7 +396,7 @@ function simulateRustCompile(source){
     const code=maskedLines[lineIndex].trim();
     const needsSemicolon=/^let\b/.test(code)
       || /^(?:println!|print!)\s*\(/.test(code)
-      || /^[A-Za-z_]\w*\s*\+=/.test(code)
+      || /^[A-Za-z_]\w*\s*(?:\+|-|\*|\/|%)=/.test(code)
       || /^[A-Za-z_]\w*\s*\.\s*(?:push|push_str)\s*\(/.test(code)
       || /^mostrar_estado\s*\(/.test(code);
     const validEnding=/[;,{}]$/.test(code);
@@ -387,7 +411,7 @@ function simulateRustCompile(source){
   immutableDeclarations.forEach(declaration=>{
     const name=declaration[1];
     const later=source.slice(declaration.index+declaration[0].length);
-    const mutation=new RegExp(`\\b${name}\\s*(?:\\+=|\\.\\s*(?:push|push_str)\\s*\\()`).exec(later);
+    const mutation=new RegExp(`\\b${name}\\s*(?:(?:\\+|-|\\*|/|%)=|\\.\\s*(?:push|push_str)\\s*\\()`).exec(later);
     if(mutation){
       const index=declaration.index+declaration[0].length+mutation.index;
       errors.push(makeCompilerError(source,index,"E0596",`no se puede modificar \`${name}\` porque no es mutable`,`declara la variable con \`let mut ${name}\``));
@@ -436,8 +460,8 @@ function setConsoleOutput(label,output,state=""){
 function renderObjective(text){
   const target=$("challengeObjective");
   const keyTarget=$("challengeKeyTokens");
-  const pattern=/"(?:\\.|[^"\\])*"|String::from|println!|write!|vec!|push_str|\b(?:let|mut|fn|if|else|for|while|loop|break|in|match|struct|enum|impl|trait|type|Self|self|use|move|const|return|Result|Option|Some|None|Ok|Err|String|Vec|Box|HashMap|Rc|RefCell|Arc|Mutex|Cow|i32|u32|u16|u8|usize|f64|bool|char|str|PartialOrd|Copy|Display|Iterator|From)\b|&mut|&String|&str|\.\.=|\.\.|>=|<=|==|\+=|->|::|\d+(?:\.\d+)?/g;
-  const keywords=new Set(["let","mut","fn","if","else","for","while","loop","break","in","match","struct","enum","impl","trait","type","Self","self","use","move","const","return"]);
+  const pattern=/"(?:\\.|[^"\\])*"|String::from|println!|write!|vec!|push_str|\b(?:let|mut|fn|if|else|for|while|loop|break|continue|in|match|struct|enum|impl|trait|type|Self|self|use|move|const|return|Result|Option|Some|None|Ok|Err|String|Vec|Box|HashMap|Rc|RefCell|Arc|Mutex|Cow|i32|u32|u16|u8|usize|f64|bool|char|str|PartialOrd|Copy|Display|Iterator|From)\b|&mut|&String|&str|\.\.=|\.\.|>=|<=|==|!=|&&|\|\||\+=|-=|->|::|%|\d+(?:\.\d+)?/g;
+  const keywords=new Set(["let","mut","fn","if","else","for","while","loop","break","continue","in","match","struct","enum","impl","trait","type","Self","self","use","move","const","return"]);
   const types=new Set(["String","Result","Option","Some","None","Ok","Err","Vec","Box","HashMap","Rc","RefCell","Arc","Mutex","Cow","i32","u32","u16","u8","usize","f64","bool","char","str","&String","&str","&mut","PartialOrd","Copy","Display","Iterator","From"]);
   const macros=new Set(["println!","write!","vec!"]);
   const fragment=document.createDocumentFragment();
@@ -449,7 +473,7 @@ function renderObjective(text){
     const token=document.createElement("span");
     const value=match[0];
     token.textContent=value;
-    token.className=value.startsWith('"')?"objective-string":macros.has(value)?"objective-macro":keywords.has(value)?"objective-keyword":types.has(value)?"objective-type":/^\d+(?:\.\d+)?$/.test(value)?"objective-number":/^(?:\.\.=|\.\.|>=|<=|==|\+=|->|::)$/.test(value)?"objective-operator":"objective-name";
+    token.className=value.startsWith('"')?"objective-string":macros.has(value)?"objective-macro":keywords.has(value)?"objective-keyword":types.has(value)?"objective-type":/^\d+(?:\.\d+)?$/.test(value)?"objective-number":/^(?:\.\.=|\.\.|>=|<=|==|!=|&&|\|\||\+=|-=|->|::|%)$/.test(value)?"objective-operator":"objective-name";
     if(!usedKeys.has(value)&&usedKeys.size<10){const key=token.cloneNode(true);key.classList.add("key-token");keyFragment.append(key);usedKeys.add(value)}
     fragment.append(token);position=match.index+value.length;
   }
