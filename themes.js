@@ -68,7 +68,8 @@
         const label = document.createElement("span");
         label.textContent = name;
         const check = document.createElement("b");
-        check.textContent = "✓";
+        check.className = "ui-icon";
+        check.textContent = "\uE9CA";
         check.setAttribute("aria-hidden", "true");
         option.append(palette, label, check);
 
@@ -102,8 +103,8 @@
         headingText.append(title, description);
         const close = document.createElement("button");
         close.type = "button";
-        close.className = "theme-panel-close";
-        close.textContent = "×";
+        close.className = "theme-panel-close ui-icon";
+        close.textContent = "\uE970";
         close.setAttribute("aria-label", "Cerrar selector de temas");
         close.addEventListener("click", closePanel);
         heading.append(headingText, close);
@@ -123,8 +124,8 @@
         toggle.setAttribute("aria-expanded", "false");
 
         const icon = document.createElement("span");
-        icon.className = "global-theme-icon";
-        icon.textContent = "🎨";
+        icon.className = "global-theme-icon ui-icon";
+        icon.textContent = "\uE957";
         icon.setAttribute("aria-hidden", "true");
         const copy = document.createElement("span");
         copy.className = "global-theme-copy";
@@ -135,8 +136,8 @@
         current.textContent = "Nord Clásico";
         copy.append(label, current);
         const arrow = document.createElement("span");
-        arrow.className = "global-theme-arrow";
-        arrow.textContent = "⌃";
+        arrow.className = "global-theme-arrow ui-icon";
+        arrow.textContent = "\uE913";
         arrow.setAttribute("aria-hidden", "true");
         toggle.append(icon, copy, arrow);
 

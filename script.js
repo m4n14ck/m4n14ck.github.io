@@ -1,26 +1,26 @@
 const rustProjects = [
     {
-        name: "Programas básicos Rust", icon: "🦀",
+        name: "Programas básicos Rust", icon: "EA68",
         description: "Curso introductorio de Rust en español con ejemplos prácticos, organizado en lecciones.",
         url: "https://github.com/m4n14ck/Rust", tags: ["Rust", "CLI", "Código"]
     },
     {
-        name: "md5-tool", icon: "🔐",
+        name: "md5-tool", icon: "E9F1",
         description: "Utilidades de hashing y procesamiento de archivos.",
         url: "https://github.com/m4n14ck/md5-tool", tags: ["Rust", "Hash"]
     },
     {
-        name: "process", icon: "⚙️",
+        name: "process", icon: "E9F7",
         description: "Biblioteca para administración y procesos del sistema.",
         url: "https://github.com/m4n14ck/process", tags: ["Rust", "Systems"]
     },
     {
-        name: "File Manager in Rust", icon: "🗂️",
+        name: "File Manager in Rust", icon: "E98C",
         description: "Administrador de archivos interactivo con detección automática y selección numérica.",
         url: "https://github.com/m4n14ck/rust-file-manager", tags: ["Rust", "Systems", "Manager"]
     },
     {
-        name: "Introducción a Rust", icon: "📚",
+        name: "Introducción a Rust", icon: "E96E",
         description: "Curso práctico para aprender Rust desde cero y avanzar progresivamente.",
         url: "https://github.com/m4n14ck/Introduccion_a_rust", tags: ["Rust", "PDF", "Curso"]
     }
@@ -28,17 +28,17 @@ const rustProjects = [
 
 const otherProjects = [
     {
-        name: "ADB-Exploiter", icon: "📱",
+        name: "ADB-Exploiter", icon: "E9FE",
         description: "Toolkit para auditorías Android mediante ADB.",
         url: "https://github.com/m4n14ck/ADB-Exploiter", tags: ["C++", "Android"]
     },
     {
-        name: "Dexsploit", icon: "⚡",
+        name: "Dexsploit", icon: "E98F",
         description: "Framework para ingeniería inversa y análisis de archivos DEX.",
         url: "https://github.com/m4n14ck/Dexsploit", tags: ["Java", "Reverse"]
     },
     {
-        name: "wifi-password-viewer", icon: "📶",
+        name: "wifi-password-viewer", icon: "E9D8",
         description: "Recuperación de perfiles WiFi locales.",
         url: "https://github.com/m4n14ck/wifi-password-viewer", tags: ["Python", "Windows"]
     }
@@ -46,10 +46,10 @@ const otherProjects = [
 
 function createCard(project) {
     return `<a href="${project.url}" target="_blank" rel="noopener noreferrer" class="project-card">
-        <div class="card-top"><h3>${project.icon} ${project.name}</h3></div>
+        <div class="card-top"><h3><span class="ui-icon" aria-hidden="true">&#x${project.icon};</span> ${project.name}</h3></div>
         <p>${project.description}</p>
         <div class="tags">${project.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
-        <span class="view">View Repository →</span>
+        <span class="view">View Repository <i class="ui-icon" aria-hidden="true">&#xE919;</i></span>
     </a>`;
 }
 

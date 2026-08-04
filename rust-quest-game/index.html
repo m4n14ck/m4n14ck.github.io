@@ -74,11 +74,10 @@
             line-height: 1.55;
         }
         .common-error::before {
-            content: "⚠ ERROR COMÚN · ";
-            color: #e1bc67;
-            font: 700 9px monospace;
-            letter-spacing: .8px;
+            content: none;
         }
+        .common-error > b { margin-right: 5px; color: #e1bc67; font: 700 9px monospace; letter-spacing: .8px; }
+        .common-error > b .ui-icon { margin-right: 4px; font-size: 11px; }
         .examples-grid {
             display: grid;
             gap: 10px;
@@ -127,12 +126,12 @@
             line-height: 1.6;
         }
         .tips-list li::before {
-            content: "✓";
+            content: "\e9ca";
             position: absolute;
             top: 10px;
             left: 12px;
             color: #7fc8ff;
-            font: 800 11px monospace;
+            font: 400 11px "m4n14ck-icons";
         }
         .mini-challenge {
             margin-top: 12px;
@@ -159,7 +158,7 @@
             border-radius: 6px;
             box-shadow: 0 0 24px rgba(225, 122, 67, .08);
         }
-        .objective b::before { content: "🎯 TU MISIÓN PARA AVANZAR · "; }
+        .objective b .ui-icon { margin-right: 5px; font-size: 12px; }
         .objective p {
             color: #f2e7d7;
             font-size: 14px !important;
@@ -757,8 +756,8 @@
             .stats span { white-space: nowrap; }
             .stats, .theme-picker, .visitor-count, .reset-course { width: 100%; min-height: 44px; justify-content: center; }
             .stats { padding: 0 8px; border: 1px solid var(--n-line); border-radius: 4px; background: var(--n-panel); }
-            .visitor-count { padding: 0 8px; font-size: 0; }
-            .visitor-count::before { content: "👁 VISITAS"; font-size: 8px; }
+            .visitor-count { padding: 0 8px; font-size: 8px; }
+            .visitor-count .ui-icon { font-size: 13px; }
             .visitor-count b { font-size: 9px; }
             .reset-course { padding: 0 9px; font-size: 8px; letter-spacing: .7px; }
             .header-actions .reset-course { grid-column: 1 / -1; }
@@ -823,18 +822,18 @@
 </head>
 <body class="rust-quest-page" data-theme="nord-classic">
     <header>
-        <a href="../" class="brand">← <strong>m4n14ck</strong></a>
+        <a href="../" class="brand ui-icon-button"><span class="ui-icon" aria-hidden="true">&#xE918;</span> <strong>m4n14ck</strong></a>
         <div class="title"><b>RUST QUEST</b><span>CODE TO SURVIVE</span></div>
         <div class="header-actions">
             <div class="stats"><span>NIVEL <b id="level">01</b></span><span><b id="xp">0</b> XP</span></div>
-            <span class="visitor-count" title="Visitas aproximadas al curso">👁 VISITAS <b id="visitorCount" aria-live="polite">—</b></span>
-            <button id="resetCourse" class="reset-course" type="button" title="Borrar todo el progreso">↻ REINICIAR CURSO</button>
+            <span class="visitor-count" title="Visitas aproximadas al curso"><span class="ui-icon" aria-hidden="true">&#xE9BF;</span> VISITAS <b id="visitorCount" aria-live="polite">—</b></span>
+            <button id="resetCourse" class="reset-course ui-icon-button" type="button" title="Borrar todo el progreso"><span class="ui-icon" aria-hidden="true">&#xE9E6;</span> REINICIAR CURSO</button>
         </div>
     </header>
 
     <main>
         <section class="intro">
-            <div><span>// 13 MÓDULOS · 35 MISIONES</span><h1>Aprende Rust.<br><em>Piensa como programador.</em></h1><p>Aprende sintaxis, resolución de problemas, depuración, código limpio y buenas prácticas mientras completas misiones.</p><a class="practice-link" href="../rust-competition/">⚡ ABRIR COMPETENCIA RUST</a></div>
+            <div><span>// 13 MÓDULOS · 35 MISIONES</span><h1>Aprende Rust.<br><em>Piensa como programador.</em></h1><p>Aprende sintaxis, resolución de problemas, depuración, código limpio y buenas prácticas mientras completas misiones.</p><a class="practice-link ui-icon-button" href="../rust-competition/"><span class="ui-icon" aria-hidden="true">&#xED7D;</span> ABRIR COMPETENCIA RUST</a></div>
             <div class="progress"><strong id="percent">0%</strong><span id="counter">0 / 5 MISIONES</span><div><i id="progressBar"></i></div></div>
         </section>
 
@@ -844,27 +843,27 @@
                 <div class="brief">
                     <span id="missionTag">// MISIÓN 01</span><h2 id="missionTitle"></h2>
                     <div class="learning-block explanation">
-                        <b>📖 EXPLICACIÓN</b>
+                        <b><span class="ui-icon" aria-hidden="true">&#xE96E;</span> EXPLICACIÓN</b>
                         <p id="lesson"></p>
                         <div class="key-points">
                             <strong>PARA RECORDAR</strong>
                             <ul id="keyPoints"></ul>
                         </div>
-                        <div class="common-error" id="commonError"></div>
+                        <div class="common-error"><b><span class="ui-icon" aria-hidden="true">&#xEACF;</span> ERROR COMÚN ·</b><span id="commonError"></span></div>
                     </div>
                     <div class="learning-block example">
-                        <b>💡 EJEMPLOS PASO A PASO</b>
+                        <b><span class="ui-icon" aria-hidden="true">&#xE9A0;</span> EJEMPLOS PASO A PASO</b>
                         <div id="examples" class="examples-grid"></div>
                     </div>
                     <div class="learning-block growth">
-                        <b>🚀 MEJORA COMO PROGRAMADOR</b>
+                        <b><span class="ui-icon" aria-hidden="true">&#xE9D1;</span> MEJORA COMO PROGRAMADOR</b>
                         <p id="growthGoal" class="growth-goal"></p>
                         <ul id="programmingTips" class="tips-list"></ul>
                         <div class="mini-challenge"><b>PRÁCTICA RECOMENDADA · </b><span id="miniChallenge"></span></div>
                     </div>
-                    <div class="objective"><b>OBJETIVO</b><p id="objective"></p></div>
+                    <div class="objective"><b><span class="ui-icon" aria-hidden="true">&#xE98F;</span> TU MISIÓN PARA AVANZAR · OBJETIVO</b><p id="objective"></p></div>
                 </div>
-                <button id="openIde" class="open-ide" type="button">⌨ ABRIR IDE Y RESOLVER LA MISIÓN</button>
+                <button id="openIde" class="open-ide ui-icon-button" type="button"><span class="ui-icon" aria-hidden="true">&#xEAE5;</span> ABRIR IDE Y RESOLVER LA MISIÓN</button>
                 <div id="ideOverlay" class="ide-overlay hidden" aria-hidden="true">
                     <div class="ide-window" role="dialog" aria-modal="true" aria-label="IDE simulado de Rust">
                         <div class="ide-mission-brief">
@@ -881,19 +880,19 @@
                             </details>
                         </div>
                         <div class="terminal">
-                            <div class="bar"><i></i><i></i><i></i><span>main.rs</span><b class="editor-shortcuts">TAB: 4 ESPACIOS · ↑↓ + ENTER: AUTOCOMPLETAR</b><button id="backFromIde" class="back-ide" type="button">← REGRESAR AL MÓDULO</button><button id="closeIde" class="close-ide" type="button" aria-label="Cerrar IDE">×</button></div>
+                            <div class="bar"><i></i><i></i><i></i><span>main.rs</span><b class="editor-shortcuts">TAB: 4 ESPACIOS · ↑↓ + ENTER: AUTOCOMPLETAR</b><button id="backFromIde" class="back-ide ui-icon-button" type="button"><span class="ui-icon" aria-hidden="true">&#xE918;</span> REGRESAR AL MÓDULO</button><button id="closeIde" class="close-ide ui-icon" type="button" aria-label="Cerrar IDE">&#xE970;</button></div>
                             <div class="editor">
                                 <pre id="lines"></pre>
                                 <div class="highlighting-wrap" aria-hidden="true"><pre id="highlighting"></pre></div>
                                 <textarea id="code" wrap="off" spellcheck="false" aria-label="Editor de Rust" autocomplete="off"></textarea>
                                 <div id="autocomplete" class="autocomplete hidden" role="listbox"></div>
                             </div>
-                            <div class="actions"><button id="hint">SOLICITAR PISTA</button><button id="reset">REINICIAR</button><button id="run">▶ EJECUTAR CÓDIGO</button></div>
+                            <div class="actions"><button id="hint" class="ui-icon-button"><span class="ui-icon" aria-hidden="true">&#xE9A0;</span> SOLICITAR PISTA</button><button id="reset" class="ui-icon-button"><span class="ui-icon" aria-hidden="true">&#xE9E6;</span> REINICIAR</button><button id="run" class="ui-icon-button"><span class="ui-icon" aria-hidden="true">&#xE9D5;</span> EJECUTAR CÓDIGO</button></div>
                         </div>
                         <div id="hintBox" class="hint hidden"></div>
                         <div class="console"><b>CONSOLA / SALIDA</b><pre id="output">[RUST QUEST]
 Sistema preparado. Selecciona una misión.</pre></div>
-                        <button id="next" class="next hidden">SIGUIENTE MISIÓN →</button>
+                        <button id="next" class="next hidden ui-icon-button">SIGUIENTE MISIÓN <span class="ui-icon" aria-hidden="true">&#xE919;</span></button>
                     </div>
                 </div>
             </section>
@@ -902,28 +901,28 @@ Sistema preparado. Selecciona una misión.</pre></div>
         <section id="practice" class="practice-zone hidden" aria-hidden="true">
             <div class="competition-intro">
                 <div class="practice-heading">
-                    <span class="practice-kicker">⚡ MODO CONTRARRELOJ</span>
+                    <span class="practice-kicker"><i class="ui-icon" aria-hidden="true">&#xED7D;</i> MODO CONTRARRELOJ</span>
                     <h2>Competencia Rust</h2>
                     <p>Selecciona una dificultad y resuelve cinco retos de programación antes de que termine el tiempo. Cada nivel utiliza conceptos diferentes y aumenta progresivamente el desafío.</p>
                 </div>
                 <div class="difficulty-grid" role="group" aria-label="Seleccionar dificultad">
                     <button class="difficulty-card selected" type="button" data-practice-level="easy" aria-pressed="true">
-                        <span class="difficulty-number">01</span><span class="difficulty-check">✓</span>
+                        <span class="difficulty-number">01</span><span class="difficulty-check ui-icon" aria-hidden="true">&#xE9CA;</span>
                         <h3>Fácil</h3><p>Sintaxis, variables, impresión, condiciones y ciclos básicos.</p>
                         <span class="difficulty-meta"><span>FUNDAMENTOS</span><b class="difficulty-time">01:30</b></span>
                     </button>
                     <button class="difficulty-card" type="button" data-practice-level="medium" aria-pressed="false">
-                        <span class="difficulty-number">02</span><span class="difficulty-check">✓</span>
+                        <span class="difficulty-number">02</span><span class="difficulty-check ui-icon" aria-hidden="true">&#xE9CA;</span>
                         <h3>Medio</h3><p>Funciones, vectores, String, match y estructuras.</p>
                         <span class="difficulty-meta"><span>DESARROLLO</span><b class="difficulty-time">02:00</b></span>
                     </button>
                     <button class="difficulty-card" type="button" data-practice-level="advanced" aria-pressed="false">
-                        <span class="difficulty-number">03</span><span class="difficulty-check">✓</span>
+                        <span class="difficulty-number">03</span><span class="difficulty-check ui-icon" aria-hidden="true">&#xE9CA;</span>
                         <h3>Avanzado</h3><p>Ownership, préstamos, Result, métodos y refactorización.</p>
                         <span class="difficulty-meta"><span>RUST ESENCIAL</span><b class="difficulty-time">03:00</b></span>
                     </button>
                 </div>
-                <button id="startPractice" class="practice-start" type="button">INICIAR COMPETENCIA · 01:30 →</button>
+                <button id="startPractice" class="practice-start ui-icon-button" type="button">INICIAR COMPETENCIA · 01:30 <span class="ui-icon" aria-hidden="true">&#xE919;</span></button>
             </div>
             <div id="practicePanel" class="practice-panel hidden">
                 <div class="practice-status">
@@ -944,7 +943,7 @@ Sistema preparado. Selecciona una misión.</pre></div>
                 <div id="practiceResult" class="practice-result hidden">
                     <strong id="practiceFinalScore">0 / 5</strong>
                     <p id="practiceFinalMessage"></p>
-                    <button id="retryPractice" class="practice-retry" type="button">VOLVER A INTENTAR</button>
+                    <button id="retryPractice" class="practice-retry ui-icon-button" type="button"><span class="ui-icon" aria-hidden="true">&#xE9E6;</span> VOLVER A INTENTAR</button>
                 </div>
             </div>
         </section>

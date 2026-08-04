@@ -1,3 +1,16 @@
+@font-face{font-family:"CIBFont Sans";src:url("assets/fonts/CIBFontSans-Light.ttf") format("truetype");font-style:normal;font-weight:300;font-display:swap}
+@font-face{font-family:"CIBFont Sans";src:url("assets/fonts/CIBFontSans-Regular.ttf") format("truetype");font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:"CIBFont Sans";src:url("assets/fonts/CIBFontSans-Bold.ttf") format("truetype");font-style:normal;font-weight:700;font-display:swap}
+@font-face{font-family:"Open Sans";src:url("assets/fonts/OpenSans-Regular.ttf") format("truetype");font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:"Open Sans";src:url("assets/fonts/OpenSans-SemiBold.ttf") format("truetype");font-style:normal;font-weight:600;font-display:swap}
+@font-face{font-family:"Open Sans";src:url("assets/fonts/OpenSans-Bold.ttf") format("truetype");font-style:normal;font-weight:700;font-display:swap}
+@font-face{font-family:"m4n14ck-icons";src:url("assets/fonts/icons.woff") format("woff");font-style:normal;font-weight:400;font-display:block}
+
+body[data-theme]{font-family:"Open Sans",Arial,sans-serif}
+body[data-theme] h1,body[data-theme] h2,body[data-theme] h3{font-family:"CIBFont Sans","Open Sans",sans-serif;font-weight:700}
+.ui-icon{display:inline-block;font-family:"m4n14ck-icons"!important;font-style:normal!important;font-weight:400!important;line-height:1;speak:none;text-rendering:auto;-webkit-font-smoothing:antialiased}
+.ui-icon-button{display:inline-flex;align-items:center;justify-content:center;gap:.55em}.ui-icon-button .ui-icon{font-size:1.1em}
+
 body[data-theme="nord-classic"]{--n-bg:#2e3440;--n-panel:#3b4252;--n-surface:#434c5e;--n-editor:#242933;--n-line:#4c566a;--n-accent:#88c0d0;--n-accent2:#81a1c1;--n-text:#eceff4;--n-muted:#d8dee9;--n-success:#a3be8c;--n-warning:#ebcb8b;--n-danger:#bf616a}
 body[data-theme="polar-night"]{--n-bg:#1f232b;--n-panel:#292e39;--n-surface:#353c4a;--n-editor:#171a20;--n-line:#465062;--n-accent:#81a1c1;--n-accent2:#5e81ac;--n-text:#e5e9f0;--n-muted:#aeb8c6;--n-success:#8fbc8f;--n-warning:#d7ba7d;--n-danger:#bf616a}
 body[data-theme="frost-blue"]{--n-bg:#27313d;--n-panel:#32404e;--n-surface:#3c4d5d;--n-editor:#1e2730;--n-line:#526779;--n-accent:#8fbcbb;--n-accent2:#88c0d0;--n-text:#edf3f5;--n-muted:#cbd7dc;--n-success:#a3be8c;--n-warning:#ebcb8b;--n-danger:#d57780}

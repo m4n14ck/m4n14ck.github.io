@@ -363,7 +363,7 @@ function selectLevel(name){
   if(running||!levels[name])return;
   selectedLevel=name;
   document.querySelectorAll("[data-level]").forEach(button=>{const selected=button.dataset.level===name;button.classList.toggle("selected",selected);button.setAttribute("aria-pressed",String(selected))});
-  $("startCompetition").textContent=`INICIAR COMPETENCIA · ${formatTime(levels[name].seconds)} →`;
+  $("startCompetition").innerHTML=`INICIAR COMPETENCIA · ${formatTime(levels[name].seconds)} <span class="ui-icon" aria-hidden="true">&#xE919;</span>`;
 }
 
 function renderChallenge(){
@@ -498,7 +498,7 @@ $("checkSolution").addEventListener("click",()=>{
     setConsoleOutput(`FALTAN ${missing.length} ${missing.length===1?"REQUISITO":"REQUISITOS"}`,missing[0]);
     return;
   }
-  score++;challengeIndex++;addTimeBonus();$("checkSolution").disabled=true;$("resetChallenge").disabled=true;$("competitionScore").textContent=score*100;setConsole("CORRECTO","[EJECUCION COMPLETADA]\n\n✓ Reto superado · +100 puntos · +20 segundos","ok");setConsoleOutput("SALIDA OBTENIDA",challenge.output,true);
+  score++;challengeIndex++;addTimeBonus();$("checkSolution").disabled=true;$("resetChallenge").disabled=true;$("competitionScore").textContent=score*100;setConsole("CORRECTO","[EJECUCION COMPLETADA]\n\n[OK] Reto superado · +100 puntos · +20 segundos","ok");setConsoleOutput("SALIDA OBTENIDA",challenge.output,true);
   if(challengeIndex>=activeChallenges.length){clearInterval(timerId);timerId=null;setTimeout(()=>finishCompetition("complete"),1100)}else{setTimeout(()=>{if(running)renderChallenge()},1100)}
 });
 $("resetChallenge").addEventListener("click",()=>{

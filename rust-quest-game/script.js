@@ -726,7 +726,7 @@ function renderNav() {
     lastModule = mission.module;
     const done = state.done.includes(index);
     return `${moduleHeader}<button class="mission ${index === state.active ? "active" : ""} ${done ? "done" : ""} ${!unlocked(index) ? "locked" : ""}" data-id="${index}">
-      <b>${done ? "✓" : pad(index + 1)}</b>
+      <b>${done ? '<span class="ui-icon" aria-label="Completada">&#xE9CA;</span>' : pad(index + 1)}</b>
       <span><small>MISIÓN ${pad(index + 1)}</small><strong>${mission.title}</strong><em>${mission.concept}</em></span>
     </button>`;
   }).join("");
@@ -948,12 +948,12 @@ $("run").onclick = () => {
   }
   save();
   render();
-  showExecutionResult(`[COMPILACIÓN SIMULADA: OK]\n\n${result}\n\n✓ MISIÓN COMPLETADA${firstCompletion ? "\n+100 XP" : ""}${state.done.length === missions.length ? "\n\n🏆 CURSO COMPLETADO · RUST OPERATIVE" : ""}`);
+  showExecutionResult(`[COMPILACIÓN SIMULADA: OK]\n\n${result}\n\n[OK] MISIÓN COMPLETADA${firstCompletion ? "\n+100 XP" : ""}${state.done.length === missions.length ? "\n\n[CURSO COMPLETADO] RUST OPERATIVE" : ""}`);
 };
 
 $("hint").onclick = () => {
   const box = $("hintBox");
-  box.innerHTML = `<b>💡 PISTA DEL SISTEMA</b><p>${missions[state.active].hint}</p>`;
+  box.innerHTML = `<b><span class="ui-icon" aria-hidden="true">&#xE9A0;</span> PISTA DEL SISTEMA</b><p>${missions[state.active].hint}</p>`;
   box.classList.toggle("hidden");
 };
 
@@ -1055,7 +1055,7 @@ function finishPractice(reason) {
   $("practiceResult").classList.remove("hidden");
   document.querySelectorAll("[data-practice-level]").forEach(button => button.disabled = false);
   $("startPractice").disabled = false;
-  $("startPractice").textContent = `INICIAR DE NUEVO · ${formatPracticeTime(practiceLevels[selectedPracticeLevel].seconds)} →`;
+  $("startPractice").innerHTML = `INICIAR DE NUEVO · ${formatPracticeTime(practiceLevels[selectedPracticeLevel].seconds)} <span class="ui-icon" aria-hidden="true">&#xE919;</span>`;
   $("practiceFinalScore").textContent = `${practiceScore} / ${activePracticeChallenges.length}`;
   $("practiceFinalMessage").textContent = reason === "time"
     ? "El tiempo terminó. Revisa los conceptos y vuelve a intentarlo."
@@ -1103,7 +1103,7 @@ function selectPracticeLevel(levelName) {
   practiceSeconds = level.seconds;
   updatePracticeTimer();
   $("practiceDifficulty").textContent = level.label;
-  $("startPractice").textContent = `INICIAR COMPETENCIA · ${formatPracticeTime(level.seconds)} →`;
+  $("startPractice").innerHTML = `INICIAR COMPETENCIA · ${formatPracticeTime(level.seconds)} <span class="ui-icon" aria-hidden="true">&#xE919;</span>`;
   $("practicePanel").classList.add("hidden");
 }
 
@@ -1123,7 +1123,7 @@ $("submitPractice").onclick = () => {
 
   practiceScore++;
   $("practiceScore").textContent = practiceScore;
-  $("practiceFeedback").textContent = "✓ Solución correcta";
+  $("practiceFeedback").innerHTML = '<span class="ui-icon" aria-hidden="true">&#xE9CA;</span> Solución correcta';
   $("practiceFeedback").className = "practice-feedback ok";
   practiceIndex++;
   if (practiceIndex >= activePracticeChallenges.length) {
