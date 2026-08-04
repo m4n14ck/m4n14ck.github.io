@@ -95,17 +95,162 @@ function placeCaretInStarter(){
   editor.focus();
 }
 
+function sourceLocation(source,index){
+  const before=source.slice(0,index).split("\n");
+  const line=before.length;
+  const column=before[before.length-1].length+1;
+  return {line,column,text:source.split("\n")[line-1]||""};
+}
+
+function makeCompilerError(source,index,code,message,help="",length=1){
+  return {...sourceLocation(source,index),code,message,help,length:Math.max(1,length)};
+}
+
+function maskRustStringsAndComments(source,errors){
+  const masked=source.split("");
+  let stringStart=-1;
+  let inString=false;
+  let inComment=false;
+  let escaped=false;
+
+  for(let index=0;index<source.length;index++){
+    const character=source[index];
+    if(inComment){
+      if(character==="\n")inComment=false;
+      else masked[index]=" ";
+      continue;
+    }
+    if(inString){
+      masked[index]=character==="\n"?"\n":" ";
+      if(escaped){escaped=false;continue}
+      if(character==="\\"){escaped=true;continue}
+      if(character==='"'){inString=false;stringStart=-1}
+      continue;
+    }
+    if(character==="/"&&source[index+1]==="/"){
+      masked[index]=masked[index+1]=" ";
+      inComment=true;index++;continue;
+    }
+    if(character==='"'){
+      masked[index]=" ";inString=true;stringStart=index;
+    }
+  }
+
+  if(inString){
+    errors.push(makeCompilerError(source,stringStart,"E0765","cadena de texto sin cerrar",'agrega una comilla doble (\") para cerrar el texto'));
+  }
+  return masked.join("");
+}
+
+function simulateRustCompile(source){
+  const errors=[];
+  const masked=maskRustStringsAndComments(source,errors);
+  const addMatch=(pattern,code,message,help,length)=>{
+    const match=pattern.exec(masked);
+    if(match)errors.push(makeCompilerError(source,match.index,code,message,help,length||match[0].length));
+  };
+
+  addMatch(/\.\s*as_string\s*\(/,"E0599",'no existe el metodo `as_string` para este valor','usa `.to_string()`; ese es el nombre del metodo en Rust');
+  addMatch(/\.\s*toString\s*\(/,"E0599",'no existe el metodo `toString` para este valor','en Rust se escribe `.to_string()`');
+  addMatch(/\.\s*length\s*\(/,"E0599",'no existe el metodo `length` para este valor','usa `.len()` para obtener la longitud');
+  addMatch(/\bString\s*\.\s*from\s*\(/,"E0223",'forma incorrecta de llamar a `String::from`','usa `String::from("texto")` con dos puntos dobles');
+  addMatch(/\bprintln\s*\(/,"E0423",'`println` es una macro, no una funcion','escribe `println!(...)` con el signo `!`');
+  addMatch(/\bprint\s*\(/,"E0423",'`print` es una macro, no una funcion','escribe `print!(...)` con el signo `!`');
+  addMatch(/\bvec\s*\[/,"E0423",'`vec` es una macro','escribe `vec![...]` con el signo `!`');
+  addMatch(/\bfn\s+[A-Za-z_]\w*\s*\([^\n{}]*\)\s*=>/,"E0178",'se uso `=>` como tipo de retorno','usa `->`, por ejemplo: `fn sumar() -> i32`');
+  addMatch(/\b(?:and|or)\b/,"E0425",'operador logico no valido en Rust','usa `&&` para AND o `||` para OR');
+
+  const bracketStack=[];
+  const pairs={"{":"}","(":")","[":"]"};
+  const opening=new Set(Object.keys(pairs));
+  const closing=new Set(Object.values(pairs));
+  for(let index=0;index<masked.length;index++){
+    const character=masked[index];
+    if(opening.has(character))bracketStack.push({character,index});
+    else if(closing.has(character)){
+      const last=bracketStack[bracketStack.length-1];
+      if(!last||pairs[last.character]!==character){
+        errors.push(makeCompilerError(source,index,"E0001",`delimitador inesperado \`${character}\``,'revisa el orden de `{}`, `()` y `[]`'));
+        break;
+      }
+      bracketStack.pop();
+    }
+  }
+  if(bracketStack.length){
+    const last=bracketStack[bracketStack.length-1];
+    errors.push(makeCompilerError(source,last.index,"E0002",`delimitador \`${last.character}\` sin cerrar`,`agrega \`${pairs[last.character]}\` para cerrar este bloque`));
+  }
+
+  if(!/\bfn\s+main\s*\(/.test(masked)){
+    errors.push(makeCompilerError(source,0,"E0601",'no se encontro la funcion `main`','agrega `fn main() { ... }` como punto de entrada'));
+  }
+
+  const lines=source.split("\n");
+  const maskedLines=masked.split("\n");
+  let offset=0;
+  lines.forEach((line,lineIndex)=>{
+    const code=maskedLines[lineIndex].trim();
+    const needsSemicolon=/^let\b/.test(code)
+      || /^(?:println!|print!)\s*\(/.test(code)
+      || /^[A-Za-z_]\w*\s*\+=/.test(code)
+      || /^[A-Za-z_]\w*\s*\.\s*(?:push|push_str)\s*\(/.test(code)
+      || /^mostrar_estado\s*\(/.test(code);
+    const validEnding=/[;,{}]$/.test(code);
+    if(needsSemicolon&&code&&!validEnding){
+      const index=offset+Math.max(0,line.search(/\s*$/)-1);
+      errors.push(makeCompilerError(source,index,"E0003",'falta `;` al final de la instruccion','agrega un punto y coma `;` al final de esta linea'));
+    }
+    offset+=line.length+1;
+  });
+
+  const immutableDeclarations=[...masked.matchAll(/\blet\s+(?!mut\b)([A-Za-z_]\w*)\s*=/g)];
+  immutableDeclarations.forEach(declaration=>{
+    const name=declaration[1];
+    const later=source.slice(declaration.index+declaration[0].length);
+    const mutation=new RegExp(`\\b${name}\\s*(?:\\+=|\\.\\s*(?:push|push_str)\\s*\\()`).exec(later);
+    if(mutation){
+      const index=declaration.index+declaration[0].length+mutation.index;
+      errors.push(makeCompilerError(source,index,"E0596",`no se puede modificar \`${name}\` porque no es mutable`,`declara la variable con \`let mut ${name}\``));
+    }
+  });
+
+  const move=/\blet\s+destino\s*=\s*origen\s*;/.exec(masked);
+  if(move){
+    const later=masked.slice(move.index+move[0].length);
+    const reused=/\borigen\b/.exec(later);
+    if(reused){
+      errors.push(makeCompilerError(source,move.index+move[0].length+reused.index,"E0382",'uso de `origen` despues de mover su valor a `destino`','usa `destino` o clona el String antes del movimiento'));
+    }
+  }
+
+  const unique=[];
+  const seen=new Set();
+  errors.sort((a,b)=>a.line-b.line||a.column-b.column).forEach(error=>{
+    const key=`${error.line}:${error.column}:${error.code}`;
+    if(!seen.has(key)){seen.add(key);unique.push(error)}
+  });
+  return unique.slice(0,4);
+}
+
+function formatCompilerErrors(errors){
+  return errors.map(error=>{
+    const marker=`${" ".repeat(Math.max(0,error.column-1))}${"^".repeat(Math.min(error.length,18))}`;
+    return `error[${error.code}]: ${error.message}\n --> main.rs:${error.line}:${error.column}\n  |\n${String(error.line).padStart(2," ")} | ${error.text}\n  | ${marker}${error.help?`\n  = ayuda: ${error.help}`:""}`;
+  }).join("\n\n");
+}
+
 function setConsole(status,message,type=""){
   $("consoleStatus").textContent=status;
   $("competitionFeedback").textContent=message;
   $("competitionFeedback").className=`feedback${type?` ${type}`:""}`;
 }
 
-function setConsoleOutput(label,output,success=false){
+function setConsoleOutput(label,output,state=""){
   $("consoleOutputLabel").textContent=label;
   $("challengeExpectedOutput").textContent=output.replace(/\n/g," · ");
   $("challengeExpectedOutput").title=output;
-  $("consoleOutputBox").classList.toggle("success",success);
+  $("consoleOutputBox").classList.toggle("success",state===true||state==="success");
+  $("consoleOutputBox").classList.toggle("error",state==="error");
 }
 
 function renderObjective(text){
@@ -147,11 +292,11 @@ function renderChallenge(){
   $("challengeTopic").textContent=levels[selectedLevel].topic;
   $("challengeTitle").textContent=challenge.title;
   renderObjective(challenge.objective);
-  setConsoleOutput("SALIDA ESPERADA",challenge.output);
+  setConsoleOutput("SALIDA OBJETIVO",challenge.output);
   $("competitionCode").value=challenge.starter;
   $("checkSolution").disabled=false;
   $("resetChallenge").disabled=false;
-  setConsole("LISTO","> Sistema preparado\n\nEscribe tu solución y pulsa “Ejecutar y comprobar”.");
+  setConsole("LISTO","> Compilador simulado preparado\n\nEscribe tu solucion y pulsa “Ejecutar y comprobar”.");
   renderEditor();
   requestAnimationFrame(placeCaretInStarter);
 }
@@ -257,7 +402,18 @@ $("leaveCompetition").addEventListener("click",()=>{if(!running)return;document.
 $("checkSolution").addEventListener("click",()=>{
   if(!running||challengeIndex>=activeChallenges.length)return;
   const challenge=activeChallenges[challengeIndex];
-  if(!challenge.valid($("competitionCode").value)){setConsole("ERROR",`[ERROR DE VALIDACIÓN]\n\nFalta algún requisito del objetivo:\n${challenge.objective}\n\nSalida esperada: ${challenge.output.replace(/\n/g," · ")}`,"error");return}
+  const code=$("competitionCode").value;
+  const compilerErrors=simulateRustCompile(code);
+  if(compilerErrors.length){
+    setConsole("NO COMPILA",`[COMPILADOR RUST · SIMULADO]\n\n${formatCompilerErrors(compilerErrors)}`,"error");
+    setConsoleOutput("COMPILACION","ERROR","error");
+    return;
+  }
+  if(!challenge.valid(code)){
+    setConsole("SINTAXIS OK",`[REVISION DE COMPILACION SUPERADA]\n\nEl simulador no detecto errores basicos, pero el codigo aun no cumple todos los requisitos del reto.\n\nRevisa el objetivo y la salida solicitada.`,"warning");
+    setConsoleOutput("RETO INCOMPLETO",challenge.output);
+    return;
+  }
   score++;challengeIndex++;addTimeBonus();$("checkSolution").disabled=true;$("resetChallenge").disabled=true;$("competitionScore").textContent=score*100;setConsole("CORRECTO","[EJECUCION COMPLETADA]\n\n✓ Reto superado · +100 puntos · +20 segundos","ok");setConsoleOutput("SALIDA OBTENIDA",challenge.output,true);
   if(challengeIndex>=activeChallenges.length){clearInterval(timerId);timerId=null;setTimeout(()=>finishCompetition("complete"),1100)}else{setTimeout(()=>{if(running)renderChallenge()},1100)}
 });
@@ -266,7 +422,7 @@ $("resetChallenge").addEventListener("click",()=>{
   $("competitionCode").value=activeChallenges[challengeIndex].starter;
   renderEditor();
   setConsole("REINICIADO","> Código restaurado\n\nPuedes comenzar nuevamente este reto.");
-  setConsoleOutput("SALIDA ESPERADA",activeChallenges[challengeIndex].output);
+  setConsoleOutput("SALIDA OBJETIVO",activeChallenges[challengeIndex].output);
   placeCaretInStarter();
 });
 $("competitionCode").addEventListener("input",renderEditor);
