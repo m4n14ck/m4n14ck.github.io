@@ -69,7 +69,7 @@
         label.textContent = name;
         const check = document.createElement("b");
         check.className = "ui-icon";
-        check.textContent = "\uE9CA";
+        check.dataset.icon = "check";
         check.setAttribute("aria-hidden", "true");
         option.append(palette, label, check);
 
@@ -103,9 +103,13 @@
         headingText.append(title, description);
         const close = document.createElement("button");
         close.type = "button";
-        close.className = "theme-panel-close ui-icon";
-        close.textContent = "\uE970";
+        close.className = "theme-panel-close ui-icon-button";
         close.setAttribute("aria-label", "Cerrar selector de temas");
+        const closeIcon = document.createElement("span");
+        closeIcon.className = "ui-icon";
+        closeIcon.dataset.icon = "close";
+        closeIcon.setAttribute("aria-hidden", "true");
+        close.append(closeIcon);
         close.addEventListener("click", closePanel);
         heading.append(headingText, close);
 
@@ -125,7 +129,7 @@
 
         const icon = document.createElement("span");
         icon.className = "global-theme-icon ui-icon";
-        icon.textContent = "\uE957";
+        icon.dataset.icon = "palette";
         icon.setAttribute("aria-hidden", "true");
         const copy = document.createElement("span");
         copy.className = "global-theme-copy";
@@ -137,7 +141,7 @@
         copy.append(label, current);
         const arrow = document.createElement("span");
         arrow.className = "global-theme-arrow ui-icon";
-        arrow.textContent = "\uE913";
+        arrow.dataset.icon = "chevron-up";
         arrow.setAttribute("aria-hidden", "true");
         toggle.append(icon, copy, arrow);
 

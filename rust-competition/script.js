@@ -363,7 +363,7 @@ function selectLevel(name){
   if(running||!levels[name])return;
   selectedLevel=name;
   document.querySelectorAll("[data-level]").forEach(button=>{const selected=button.dataset.level===name;button.classList.toggle("selected",selected);button.setAttribute("aria-pressed",String(selected))});
-  $("startCompetition").innerHTML=`INICIAR COMPETENCIA · ${formatTime(levels[name].seconds)} <span class="ui-icon" aria-hidden="true">&#xE919;</span>`;
+  $("startCompetition").innerHTML=`INICIAR COMPETENCIA · ${formatTime(levels[name].seconds)} <span class="ui-icon" data-icon="arrow-right" aria-hidden="true"></span>`;
 }
 
 function renderChallenge(){

@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src https://countapi.mileshilliard.com; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src https://countapi.mileshilliard.com; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
     <meta name="referrer" content="no-referrer">
     <title>M4n14ck - Open Source Projects</title>
     <meta name="description" content="Open source projects by M4n14ck - Rust and other tools">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="themes.css">
+    <link rel="stylesheet" href="style.css?v=37">
+    <link rel="stylesheet" href="themes.css?v=37">
 </head>
 <body class="site-home" data-theme="nord-classic">
     <div class="background-gradient">
@@ -29,7 +29,7 @@
                         <li><a href="https://github.com/m4n14ck" target="_blank" rel="noopener">GitHub</a></li>
                     </ul>
                     <span class="home-visits" title="Visitas aproximadas a la página principal">
-                        <span class="ui-icon" aria-hidden="true">&#xE9BF;</span> VISITAS
+                        <span class="ui-icon" data-icon="eye" aria-hidden="true"></span> VISITAS
                         <b id="homeVisitorCount" aria-live="polite">—</b>
                     </span>
                 </div>
@@ -43,7 +43,7 @@
                 <span class="quest-label">// INTERACTIVE RUST TRAINING</span>
                 <h1>Aprende Rust jugando</h1>
                 <p>Completa misiones, escribe código simulado y desbloquea nuevos conceptos sin instalar nada.</p>
-                <a href="rust-quest-game/" class="quest-button ui-icon-button">INICIAR RUST QUEST <span class="ui-icon" aria-hidden="true">&#xE919;</span></a>
+                <a href="rust-quest-game/" class="quest-button ui-icon-button">INICIAR RUST QUEST <span class="ui-icon" data-icon="arrow-right" aria-hidden="true"></span></a>
             </div>
             <div class="quest-terminal" aria-hidden="true">
                 <div class="terminal-header"><i></i><i></i><i></i><span>main.rs</span></div>
@@ -52,7 +52,7 @@
     nivel += 1;
     println!(<span class="code-string">"Misión iniciada"</span>);
 }</pre>
-                <div class="terminal-status"><span class="ui-icon" aria-hidden="true">&#xE9CA;</span> SISTEMA LISTO</div>
+                <div class="terminal-status"><span class="ui-icon" data-icon="check" aria-hidden="true"></span> SISTEMA LISTO</div>
             </div>
         </section>
 
@@ -62,18 +62,18 @@
                 <p>Una selección de mis herramientas y frameworks.</p>
             </div>
             <div class="category">
-                <h3><span class="ui-icon" aria-hidden="true">&#xEA68;</span> Rust Projects</h3>
+                <h3><span class="ui-icon" data-icon="code" aria-hidden="true"></span> Rust Projects</h3>
                 <div class="projects-grid" id="rust-projects"></div>
             </div>
             <div class="category">
-                <h3><span class="ui-icon" aria-hidden="true">&#xE98C;</span> Other Projects</h3>
+                <h3><span class="ui-icon" data-icon="folder" aria-hidden="true"></span> Other Projects</h3>
                 <div class="projects-grid" id="other-projects"></div>
             </div>
         </section>
     </main>
 
-    <footer><p>© 2026 <span>m4n14ck</span>. Hecho con <i class="ui-icon" aria-label="amor">&#xE999;</i> y mucho Rust</p></footer>
-    <script src="themes.js"></script>
-    <script src="script.js"></script>
+    <footer><p>© 2026 <span>m4n14ck</span>. Hecho con <i class="ui-icon" data-icon="heart" aria-label="amor"></i> y mucho Rust</p></footer>
+    <script src="themes.js?v=37"></script>
+    <script src="script.js?v=37"></script>
 </body>
 </html>

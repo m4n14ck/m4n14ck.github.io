@@ -4,41 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Competencia contrarreloj de programación simulada en Rust">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
     <title>Competencia Rust | m4n14ck</title>
-    <link rel="stylesheet" href="../themes.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../themes.css?v=37">
+    <link rel="stylesheet" href="style.css?v=37">
 </head>
 <body class="rust-competition-page" data-theme="nord-classic">
     <header class="topbar">
         <a class="brand" href="../">m4n14ck</a>
         <nav aria-label="Navegación principal">
-            <a class="ui-icon-button" href="../rust-quest-game/"><span class="ui-icon" aria-hidden="true">&#xE918;</span> Volver al curso</a>
+            <a class="ui-icon-button" href="../rust-quest-game/"><span class="ui-icon" data-icon="arrow-left" aria-hidden="true"></span> Volver al curso</a>
             <a href="../">Inicio</a>
         </nav>
     </header>
 
     <main>
         <section id="competitionSetup" class="competition-shell setup-screen">
-            <span class="kicker"><i class="ui-icon" aria-hidden="true">&#xED7D;</i> MODO CONTRARRELOJ</span>
+            <span class="kicker"><i class="ui-icon" data-icon="timer" aria-hidden="true"></i> MODO CONTRARRELOJ</span>
             <h1>Competencia Rust</h1>
             <p class="lead">Pon a prueba lo aprendido resolviendo cinco retos en un IDE simulado. Elige el nivel, programa tu respuesta y supera tantos desafíos como puedas antes de que el reloj llegue a cero.</p>
 
             <div class="difficulty-grid" role="group" aria-label="Selecciona la dificultad">
                 <button class="difficulty-card selected" type="button" data-level="easy" aria-pressed="true">
-                    <span class="number">01</span><span class="check ui-icon" aria-hidden="true">&#xE9CA;</span>
+                    <span class="number">01</span><span class="check ui-icon" data-icon="check" aria-hidden="true"></span>
                     <h2>Fácil</h2>
                     <p>Sintaxis, variables, impresión, condiciones y ciclos básicos.</p>
                     <span class="meta"><b>FUNDAMENTOS</b><strong>01:30</strong></span>
                 </button>
                 <button class="difficulty-card" type="button" data-level="medium" aria-pressed="false">
-                    <span class="number">02</span><span class="check ui-icon" aria-hidden="true">&#xE9CA;</span>
+                    <span class="number">02</span><span class="check ui-icon" data-icon="check" aria-hidden="true"></span>
                     <h2>Medio</h2>
                     <p>Funciones, vectores, String, match y estructuras.</p>
                     <span class="meta"><b>DESARROLLO</b><strong>02:00</strong></span>
                 </button>
                 <button class="difficulty-card" type="button" data-level="advanced" aria-pressed="false">
-                    <span class="number">03</span><span class="check ui-icon" aria-hidden="true">&#xE9CA;</span>
+                    <span class="number">03</span><span class="check ui-icon" data-icon="check" aria-hidden="true"></span>
                     <h2>Avanzado</h2>
                     <p>Ownership, préstamos, Result, métodos y refactorización.</p>
                     <span class="meta"><b>RUST ESENCIAL</b><strong>03:00</strong></span>
@@ -46,14 +46,14 @@
             </div>
 
             <div class="setup-actions">
-                <button id="startCompetition" class="primary-button ui-icon-button" type="button">INICIAR COMPETENCIA · 01:30 <span class="ui-icon" aria-hidden="true">&#xE919;</span></button>
+                <button id="startCompetition" class="primary-button ui-icon-button" type="button">INICIAR COMPETENCIA · 01:30 <span class="ui-icon" data-icon="arrow-right" aria-hidden="true"></span></button>
                 <p><strong>5 retos</strong> por partida · <strong>100 puntos</strong> por acierto</p>
             </div>
         </section>
 
         <section id="competitionArena" class="competition-shell arena-screen hidden" aria-live="polite">
             <div class="arena-heading">
-                <span class="kicker"><i class="ui-icon" aria-hidden="true">&#xED92;</i> COMPETENCIA EN CURSO</span>
+                <span class="kicker"><i class="ui-icon" data-icon="gauge" aria-hidden="true"></i> COMPETENCIA EN CURSO</span>
                 <div class="status-grid">
                     <div class="stat timer-stat"><span>TIEMPO</span><b id="competitionTimer">01:30</b></div>
                     <div class="stat"><span>NIVEL</span><b id="competitionDifficulty">FÁCIL</b></div>
@@ -90,7 +90,7 @@
                         <span>RUST SIMULADO · UTF-8 · TAB = 4 ESPACIOS</span>
                         <div class="editor-actions">
                             <button id="resetChallenge" class="ghost-button" type="button">REINICIAR</button>
-                            <button id="checkSolution" class="primary-button ui-icon-button" type="button"><span class="ui-icon" aria-hidden="true">&#xE9D5;</span> EJECUTAR Y COMPROBAR</button>
+                            <button id="checkSolution" class="primary-button ui-icon-button" type="button"><span class="ui-icon" data-icon="play" aria-hidden="true"></span> EJECUTAR Y COMPROBAR</button>
                         </div>
                     </div>
                 </section>
@@ -116,7 +116,7 @@
                 </article>
 
                 <article id="easySolutionPanel" class="solution-card hidden">
-                    <span><i class="ui-icon" aria-hidden="true">&#xE9A0;</i> SOLUCIÓN DEL RETO</span>
+                    <span><i class="ui-icon" data-icon="idea" aria-hidden="true"></i> SOLUCIÓN DEL RETO</span>
                     <h2 id="solutionTitle"></h2>
                     <p>En el nivel Fácil te mostramos una posible solución para que compares la estructura y aprendas del intento.</p>
                     <pre id="resultSolution"></pre>
@@ -125,7 +125,7 @@
                 </article>
 
                 <article id="noSolutionPanel" class="solution-card no-solution hidden">
-                    <span><i class="ui-icon" aria-hidden="true">&#xE9B1;</i> RETO PARA SEGUIR PRACTICANDO</span>
+                    <span><i class="ui-icon" data-icon="brain" aria-hidden="true"></i> RETO PARA SEGUIR PRACTICANDO</span>
                     <h2>La solución permanece oculta</h2>
                     <p>En los niveles Medio y Avanzado no mostramos el código completo. Revisa el concepto recomendado, vuelve a intentarlo y compara tus propios enfoques.</p>
                 </article>
@@ -139,7 +139,7 @@
     </main>
     <canvas id="matrixConfetti" class="matrix-confetti hidden" aria-hidden="true"></canvas>
 
-    <script src="../themes.js"></script>
-    <script src="script.js"></script>
+    <script src="../themes.js?v=37"></script>
+    <script src="script.js?v=37"></script>
 </body>
 </html>
